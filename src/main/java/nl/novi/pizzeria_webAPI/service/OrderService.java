@@ -20,7 +20,7 @@ public class OrderService {
     }
 
     public OrderOutputDto createOrder(OrderInputDto orderInputDto) {
-        Order order = OrderMapper.toEntity(orderInputDto);
+        Order order = OrderMapper.toEntityByCreate(orderInputDto);
         orderRepository.save(order);
 
         return OrderMapper.toDto(order);
@@ -33,5 +33,11 @@ public class OrderService {
                 .stream()
                 .map(OrderMapper::toDto)
                 .toList();
+    }
+
+    public OrderOutputDto getOrderById(Long id) {
+        return OrderMapper.toDto(
+                this.orderRepository.findById(id)
+                        .get());
     }
 }

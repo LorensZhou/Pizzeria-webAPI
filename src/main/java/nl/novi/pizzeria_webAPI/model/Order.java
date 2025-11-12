@@ -40,12 +40,16 @@ public class Order {
     public Order(int customerNum, int employeeNum, int menuItemNum, double orderAmount) {
         this.customerNum = customerNum;
         this.employeeNum = employeeNum;
-        this.orderAmount = orderAmount;
         this.menuItemNum = menuItemNum;
-        this.paymentType = PaymentType.CASH;
-        this.paymentStatus = PaymentStatus.PAID;
+        this.orderAmount = orderAmount;
+        this.paymentType = PaymentType.CASH; //hardcode assign
+        this.paymentStatus = PaymentStatus.TOPAY;
         this.orderStatus = OrderStatus.CREATED;
     }
+
+
+    //insert into roles(rolename)
+    //values ('ROLE_EMPLOYEE'), ('ROLE_CUSTOMER'), ('ROLE_CHEF');
 }
 
 
