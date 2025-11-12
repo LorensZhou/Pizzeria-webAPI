@@ -1,6 +1,7 @@
 package nl.novi.pizzeria_webAPI.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,7 +16,6 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long orderId;
-
     private int customerNum;
     private int employeeNum;
     private int menuItemNum;

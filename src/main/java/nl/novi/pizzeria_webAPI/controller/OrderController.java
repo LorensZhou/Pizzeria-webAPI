@@ -1,5 +1,6 @@
 package nl.novi.pizzeria_webAPI.controller;
 
+import jakarta.validation.Valid;
 import nl.novi.pizzeria_webAPI.dto.OrderInputDto;
 import nl.novi.pizzeria_webAPI.dto.OrderOutputDto;
 import nl.novi.pizzeria_webAPI.service.OrderService;
@@ -20,7 +21,7 @@ public class OrderController {
     }
 
     @PostMapping("")
-    public ResponseEntity<OrderOutputDto>createOrder(@RequestBody OrderInputDto orderInputDto) {
+    public ResponseEntity<OrderOutputDto>createOrder(@Valid @RequestBody OrderInputDto orderInputDto) {
 
         OrderOutputDto orderOutputDto = this.service.createOrder(orderInputDto);
         return new ResponseEntity<>(orderOutputDto, HttpStatus.CREATED);
@@ -37,5 +38,9 @@ public class OrderController {
         return ResponseEntity.ok(this.service.getOrderById(id));
     }
 
-
+    @PatchMapping("/{id}")
+    public ResponseEntity<OrderOutputDto>updatePerson(@PathVariable long id, @RequestParam int newMenuItemNum){
+        OrderOutputDto orderOutputDto = this.service.updateMenuItemNum(id, newMenuItemNum);
+        return ResponseEntity.ok(orderOutputDto);
+    }
 }

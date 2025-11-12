@@ -1,8 +1,10 @@
 package nl.novi.pizzeria_webAPI.service;
 
 
+import jakarta.validation.Valid;
 import nl.novi.pizzeria_webAPI.dto.OrderInputDto;
 import nl.novi.pizzeria_webAPI.dto.OrderOutputDto;
+import nl.novi.pizzeria_webAPI.exception.ResourceNotFoundException;
 import nl.novi.pizzeria_webAPI.mapper.OrderMapper;
 import nl.novi.pizzeria_webAPI.model.Order;
 import nl.novi.pizzeria_webAPI.repository.OrderRepository;
@@ -37,7 +39,17 @@ public class OrderService {
 
     public OrderOutputDto getOrderById(Long id) {
         return OrderMapper.toDto(
-                this.orderRepository.findById(id)
-                        .get());
+                this.orderRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Order not found")));
+    }
+
+    public OrderOutputDto updateMenuItemNum(long id, int newMenuItemNum) {
+        Order existingOrder = orderRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Order not found"));
+        if(newMenuItemNum > 0){
+            existingOrder.setMenuItemNum(newMenuItemNum);
+        }else{
+            throw new IllegalArgumentException("Menu item number must be greater than 0");
+        }
+        Order updatedOrder = orderRepository.save(existingOrder);
+        return OrderMapper.toDto(updatedOrder);
     }
 }
