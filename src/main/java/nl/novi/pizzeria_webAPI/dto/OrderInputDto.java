@@ -2,9 +2,12 @@ package nl.novi.pizzeria_webAPI.dto;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import nl.novi.pizzeria_webAPI.model.OrderDetail;
 import nl.novi.pizzeria_webAPI.model.OrderStatus;
 import nl.novi.pizzeria_webAPI.model.PaymentStatus;
-import nl.novi.pizzeria_webAPI.model.PaymentType;
+
+import java.util.Date;
+import java.util.Set;
 
 public class OrderInputDto {
 
@@ -12,13 +15,15 @@ public class OrderInputDto {
     @NotNull(message="The customer number is required.")
     @Min(value=1, message = "The customer number should be greater than 0.")
     public Integer customerNum;
+
     @NotNull(message="The employee number is required.")
     @Min(value=1, message = "The employee number should be greater than 0.")
     public Integer employeeNum;
-    public int menuItemNum;
-    public double orderAmount;
 
-    public PaymentType paymentType;
+    public Set<OrderDetail> orderDetails;;
+    public double orderAmount;
+    public Date orderDate;
+
     public PaymentStatus paymentStatus;
     public OrderStatus orderStatus;
 }

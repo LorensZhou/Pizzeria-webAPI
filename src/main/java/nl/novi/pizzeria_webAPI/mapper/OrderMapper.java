@@ -5,7 +5,6 @@ import nl.novi.pizzeria_webAPI.dto.OrderOutputDto;
 import nl.novi.pizzeria_webAPI.model.Order;
 import nl.novi.pizzeria_webAPI.model.OrderStatus;
 import nl.novi.pizzeria_webAPI.model.PaymentStatus;
-import nl.novi.pizzeria_webAPI.model.PaymentType;
 
 public class OrderMapper {
 
@@ -14,10 +13,10 @@ public class OrderMapper {
 
         order.setCustomerNum(orderInputDto.customerNum);
         order.setEmployeeNum(orderInputDto.employeeNum);
-        order.setMenuItemNum(orderInputDto.menuItemNum);
+        order.setOrderDetails(orderInputDto.orderDetails);
         order.setOrderAmount(orderInputDto.orderAmount);
+        order.setOrderDate(orderInputDto.orderDate);
 
-        order.setPaymentType(PaymentType.CASH);
         order.setPaymentStatus(PaymentStatus.TOPAY);
         order.setOrderStatus(OrderStatus.CREATED);
 
@@ -29,10 +28,10 @@ public class OrderMapper {
 
         order.setCustomerNum(orderInputDto.customerNum);
         order.setEmployeeNum(orderInputDto.employeeNum);
-        order.setMenuItemNum(orderInputDto.menuItemNum);
+        order.setOrderDetails(orderInputDto.orderDetails);
         order.setOrderAmount(orderInputDto.orderAmount);
+        order.setOrderDate(orderInputDto.orderDate);
 
-        order.setPaymentType(orderInputDto.paymentType);
         order.setPaymentStatus(orderInputDto.paymentStatus);
         order.setOrderStatus(orderInputDto.orderStatus);
 
@@ -42,13 +41,13 @@ public class OrderMapper {
     public static OrderOutputDto toDto(Order order){
         OrderOutputDto orderOutputDto = new OrderOutputDto();
 
-        orderOutputDto.orderId = order.getOrderId();
+        orderOutputDto.id = order.getId();
         orderOutputDto.customerNum = order.getCustomerNum();
         orderOutputDto.employeeNum = order.getEmployeeNum();
-        orderOutputDto.menuItemNum = order.getMenuItemNum();
+        orderOutputDto.orderDetails = order.getOrderDetails();
         orderOutputDto.orderAmount = order.getOrderAmount();
+        orderOutputDto.orderDate = order.getOrderDate();
 
-        orderOutputDto.paymentType = order.getPaymentType();
         orderOutputDto.paymentStatus = order.getPaymentStatus();
         orderOutputDto.orderStatus = order.getOrderStatus();
 
