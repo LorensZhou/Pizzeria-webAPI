@@ -4,9 +4,9 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.util.Date;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -26,6 +26,7 @@ public class Order {
     private Set<OrderDetail> orderDetails;
 
     private double orderAmount;
+    @CreationTimestamp
     private Date orderDate;
 
     //zorgt ervoor dat paymenttype geschreven wordt door JPA als ("VISA", "MASTERCARD", enz.)

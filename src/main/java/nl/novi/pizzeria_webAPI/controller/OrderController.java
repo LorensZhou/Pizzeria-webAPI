@@ -20,13 +20,6 @@ public class OrderController {
         this.service = service;
     }
 
-    @PostMapping("")
-    public ResponseEntity<OrderOutputDto>createOrder(@Valid @RequestBody OrderInputDto orderInputDto) {
-
-        OrderOutputDto orderOutputDto = this.service.createOrder(orderInputDto);
-        return new ResponseEntity<>(orderOutputDto, HttpStatus.CREATED);
-    }
-
     @GetMapping
     public ResponseEntity<List<OrderOutputDto>>getAllOrders(){
         return ResponseEntity.ok(this.service.getAllOrders());
@@ -38,8 +31,15 @@ public class OrderController {
         return ResponseEntity.ok(this.service.getOrderById(id));
     }
 
+    @PostMapping("")
+    public ResponseEntity<OrderOutputDto>createOrder(@Valid @RequestBody OrderInputDto orderInputDto) {
+
+        OrderOutputDto orderOutputDto = this.service.createOrder(orderInputDto);
+        return new ResponseEntity<>(orderOutputDto, HttpStatus.CREATED);
+    }
+
     @PatchMapping("/{id}/addItem")
-    public ResponseEntity<OrderOutputDto>updateOrderAddItem(@PathVariable long id, @RequestParam int newItemId,@RequestParam int quantity){
+    public ResponseEntity<OrderOutputDto>updateOrderAddItem(@PathVariable long id, @RequestParam int newItemId, @RequestParam int quantity){
         OrderOutputDto orderOutputDto = this.service.updateOrderAddItem(id, newItemId, quantity);
         return ResponseEntity.ok(orderOutputDto);
     }

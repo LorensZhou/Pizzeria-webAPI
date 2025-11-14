@@ -2,7 +2,6 @@ package nl.novi.pizzeria_webAPI.dto;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
-import nl.novi.pizzeria_webAPI.model.OrderDetail;
 import nl.novi.pizzeria_webAPI.model.OrderStatus;
 import nl.novi.pizzeria_webAPI.model.PaymentStatus;
 
@@ -20,7 +19,7 @@ public class OrderInputDto {
     @Min(value=1, message = "The employee number should be greater than 0.")
     public Integer employeeNum;
 
-    public Set<OrderDetail> orderDetails;;
+    public Set<DetailInputDto> detailInputDtos;;
     public double orderAmount;
     public Date orderDate;
 

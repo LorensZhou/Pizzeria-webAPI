@@ -3,6 +3,7 @@ package nl.novi.pizzeria_webAPI.service;
 
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
+import nl.novi.pizzeria_webAPI.dto.DetailInputDto;
 import nl.novi.pizzeria_webAPI.dto.OrderInputDto;
 import nl.novi.pizzeria_webAPI.dto.OrderOutputDto;
 import nl.novi.pizzeria_webAPI.exception.ResourceNotFoundException;
@@ -11,11 +12,9 @@ import nl.novi.pizzeria_webAPI.model.Item;
 import nl.novi.pizzeria_webAPI.model.Order;
 import nl.novi.pizzeria_webAPI.model.OrderDetail;
 import nl.novi.pizzeria_webAPI.repository.ItemRepository;
-import nl.novi.pizzeria_webAPI.repository.OrderDetailRepository;
 import nl.novi.pizzeria_webAPI.repository.OrderRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -29,13 +28,6 @@ public class OrderService {
     public OrderService(OrderRepository orderRepos, ItemRepository itemRepos) {
         this.orderRepository = orderRepos;
         this.itemRepository = itemRepos;
-    }
-
-    public OrderOutputDto createOrder(OrderInputDto orderInputDto) {
-        Order order = OrderMapper.toEntityByCreate(orderInputDto);
-        orderRepository.save(order);
-
-        return OrderMapper.toDto(order);
     }
 
     public List<OrderOutputDto> getAllOrders() {
@@ -53,16 +45,50 @@ public class OrderService {
     }
 
     @Transactional
+    public OrderOutputDto createOrder(OrderInputDto orderInputDto) {
+        Order order = OrderMapper.toEntity(orderInputDto);
+
+        Set<OrderDetail> orderDetails = new HashSet<>();
+        double calculatedTotalAmount = 0.0;
+
+        if(orderInputDto.detailInputDtos !=null){
+            for (DetailInputDto detailInputDto : orderInputDto.detailInputDtos)
+            {
+                Item item = itemRepository
+                        .findById(detailInputDto.itemId)
+                        .orElseThrow(()->new ResourceNotFoundException("Item not found with id: " + detailInputDto.itemId));
+
+                //aanmaken en vullen de nieuwe orderDetail
+                OrderDetail newOrderDetail = new OrderDetail();
+                newOrderDetail.setItem(item);
+                newOrderDetail.setItemQuantity(detailInputDto.itemQuantity);
+                newOrderDetail.setItemPrice(item.getPrice());
+
+                //aanmaken bi-directionele relatie
+                newOrderDetail.setOrder(order);
+                orderDetails.add(newOrderDetail);
+                calculatedTotalAmount += newOrderDetail.getAmount();
+            }
+        }
+
+        order.setOrderDetails(orderDetails);
+        order.setOrderAmount(calculatedTotalAmount);
+        //opslaan order als parent (cascade save voor OrderDetails met juiste foreign key)
+        orderRepository.save(order);
+
+        return OrderMapper.toDto(order);
+    }
+
+    @Transactional
     public OrderOutputDto updateOrderAddItem(long id, int newItemId, int quantity) {
 
-        //haal de bestaande order op
         Order existingOrder = orderRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Order not found"));
-        //haal de nieuwe item op en daarmee ook de itemPrice
-        Item newItemToAdd = itemRepository.findById(newItemId).orElseThrow(()-> new ResourceNotFoundException("Item not found"));
+        Item newItem = itemRepository.findById(newItemId).orElseThrow(()-> new ResourceNotFoundException("Item not found"));
+
         //maak een nieuwe OrderDetail aan
         OrderDetail newOrderDetail = new OrderDetail();
-        newOrderDetail.setItem(newItemToAdd);
-        newOrderDetail.setItemPrice(newItemToAdd.getPrice());
+        newOrderDetail.setItem(newItem);
+        newOrderDetail.setItemPrice(newItem.getPrice());
         newOrderDetail.setItemQuantity(quantity);
 
         //maakt link tussen de nieuwe OrderDetail en de bestaande order via foreign key orderId
@@ -73,10 +99,10 @@ public class OrderService {
         if(orderDetails == null) {
             orderDetails = new HashSet<>();
         }
+        //voeg nieuwe orderDetail toe aan de hashset van orderDetails
         orderDetails.add(newOrderDetail);
         existingOrder.setOrderDetails(orderDetails);
 
-        //de totale bedrag van de order aanpassen
         updateOrderTotalAmount(existingOrder);
         //opslaan van de order, hierdoor wordt door cascade de nieuwe orderDetail ook opgeslagen
         Order updatedOrder = orderRepository.save(existingOrder);
