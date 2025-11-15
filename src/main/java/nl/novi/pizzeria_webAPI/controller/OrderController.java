@@ -44,4 +44,16 @@ public class OrderController {
         return ResponseEntity.ok(orderOutputDto);
     }
 
+    @PatchMapping("/{id}/updateQuantity")
+    public ResponseEntity<OrderOutputDto>updateOrderItemQ(@PathVariable long id, @RequestParam int itemId, @RequestParam int quantity){
+        OrderOutputDto orderOutputDto = this.service.updateOrderItemQ(id, itemId, quantity);
+        return ResponseEntity.ok(orderOutputDto);
+    }
+
+    @PatchMapping("/{id}/{action}")
+    public ResponseEntity<OrderOutputDto>updateOrderByAction(@PathVariable long id, @PathVariable String action){
+        OrderOutputDto orderOutputDto = this.service.updateOrderByAction(id, action);
+        return ResponseEntity.ok(orderOutputDto);
+    }
+
 }

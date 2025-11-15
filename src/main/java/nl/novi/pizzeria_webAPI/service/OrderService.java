@@ -8,10 +8,9 @@ import nl.novi.pizzeria_webAPI.dto.OrderInputDto;
 import nl.novi.pizzeria_webAPI.dto.OrderOutputDto;
 import nl.novi.pizzeria_webAPI.exception.ResourceNotFoundException;
 import nl.novi.pizzeria_webAPI.mapper.OrderMapper;
-import nl.novi.pizzeria_webAPI.model.Item;
-import nl.novi.pizzeria_webAPI.model.Order;
-import nl.novi.pizzeria_webAPI.model.OrderDetail;
+import nl.novi.pizzeria_webAPI.model.*;
 import nl.novi.pizzeria_webAPI.repository.ItemRepository;
+import nl.novi.pizzeria_webAPI.repository.OrderDetailRepository;
 import nl.novi.pizzeria_webAPI.repository.OrderRepository;
 import org.springframework.stereotype.Service;
 
@@ -24,10 +23,12 @@ public class OrderService {
 
     private final OrderRepository orderRepository;
     private final ItemRepository itemRepository;
+    private final OrderDetailRepository detailRepository;
 
-    public OrderService(OrderRepository orderRepos, ItemRepository itemRepos) {
+    public OrderService(OrderRepository orderRepos, ItemRepository itemRepos, OrderDetailRepository detailRepos) {
         this.orderRepository = orderRepos;
         this.itemRepository = itemRepos;
+        this.detailRepository = detailRepos;
     }
 
     public List<OrderOutputDto> getAllOrders() {
@@ -99,8 +100,9 @@ public class OrderService {
         if(orderDetails == null) {
             orderDetails = new HashSet<>();
         }
-        //voeg nieuwe orderDetail toe aan de hashset van orderDetails
+        //voeg nieuwe orderDetail toe aan de set van orderDetails
         orderDetails.add(newOrderDetail);
+        //vervang de bestaande set orderDetails met de nieuwe set orderDetails
         existingOrder.setOrderDetails(orderDetails);
 
         updateOrderTotalAmount(existingOrder);
@@ -108,6 +110,55 @@ public class OrderService {
         Order updatedOrder = orderRepository.save(existingOrder);
         return OrderMapper.toDto(updatedOrder);
     }
+
+    @Transactional
+    public OrderOutputDto updateOrderItemQ(long id, int itemId, int quantity) {
+
+        Order existingOrder = orderRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Order not found"));
+        Item item = itemRepository.findById(itemId).orElseThrow(()-> new ResourceNotFoundException("Item not found"));
+
+
+        OrderDetail orderDetail = detailRepository.findByOrderAndItem(existingOrder, item)
+                .orElseThrow(()-> new ResourceNotFoundException("Item with id: " + item.getId() + " not found in the order " + existingOrder.getId())
+                            );
+        //de hoeveelheid wordt in de orderdetail aangepast
+        orderDetail.setItemQuantity(quantity);
+        //er wordt een nieuwe berekening gemaakt van het totaal bedrag in de order
+        updateOrderTotalAmount(existingOrder);
+
+        Order updatedOrder = orderRepository.save(existingOrder);
+        return OrderMapper.toDto(updatedOrder);
+    }
+
+    //order aanpassen voor de status afgehandeld en voor betaalstatus betaald
+    @Transactional
+    public OrderOutputDto updateOrderByAction(long id, String action) {
+
+        Order existingOrder = orderRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Order not found"));
+        switch (action) {
+            case "orderCompleted":
+                if(existingOrder.getOrderStatus() == OrderStatus.COMPLETED){
+                    throw new IllegalArgumentException("Order is already completed");
+                }
+                else if(existingOrder.getOrderStatus() == OrderStatus.CREATED) {
+                    existingOrder.setOrderStatus(OrderStatus.COMPLETED);
+                }
+                break;
+            case "orderPaid":
+                if(existingOrder.getPaymentStatus() == PaymentStatus.PAID){
+                    throw new IllegalArgumentException("Order is already paid");
+                }
+                else if(existingOrder.getPaymentStatus() == PaymentStatus.TOPAY){
+                    existingOrder.setPaymentStatus(PaymentStatus.PAID);
+                }
+                break;
+            default: throw new IllegalArgumentException("This action (" + action + ") is not valid");
+        }
+
+        Order updatedOrder = orderRepository.save(existingOrder);
+        return OrderMapper.toDto(updatedOrder);
+    }
+
 
     //helper functie voor berekening totale bedrag van de order
     private void updateOrderTotalAmount(Order order){

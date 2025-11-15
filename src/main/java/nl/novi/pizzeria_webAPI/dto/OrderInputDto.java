@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import nl.novi.pizzeria_webAPI.model.OrderStatus;
 import nl.novi.pizzeria_webAPI.model.PaymentStatus;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.Set;
 
 public class OrderInputDto {
@@ -21,7 +21,7 @@ public class OrderInputDto {
 
     public Set<DetailInputDto> detailInputDtos;;
     public double orderAmount;
-    public Date orderDate;
+    public LocalDate orderDate;
 
     public PaymentStatus paymentStatus;
     public OrderStatus orderStatus;

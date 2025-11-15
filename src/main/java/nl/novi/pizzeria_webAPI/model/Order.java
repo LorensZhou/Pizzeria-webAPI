@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.Set;
 
 @Entity
@@ -27,7 +27,7 @@ public class Order {
 
     private double orderAmount;
     @CreationTimestamp
-    private Date orderDate;
+    private LocalDate orderDate;
 
     //zorgt ervoor dat paymenttype geschreven wordt door JPA als ("VISA", "MASTERCARD", enz.)
     @Enumerated(EnumType.STRING)
@@ -35,8 +35,6 @@ public class Order {
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
 
-    //insert into roles(rolename)
-    //values ('ROLE_EMPLOYEE'), ('ROLE_CUSTOMER'), ('ROLE_CHEF');
 }
 
 

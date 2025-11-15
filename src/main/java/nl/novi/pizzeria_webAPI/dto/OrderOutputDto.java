@@ -3,7 +3,7 @@ package nl.novi.pizzeria_webAPI.dto;
 import nl.novi.pizzeria_webAPI.model.OrderStatus;
 import nl.novi.pizzeria_webAPI.model.PaymentStatus;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.Set;
 
 public class OrderOutputDto {
@@ -12,7 +12,7 @@ public class OrderOutputDto {
     public int employeeNum;
     public Set<DetailOutputDto> detailOutputDtos;
     public double orderAmount;
-    public Date orderDate;
+    public LocalDate orderDate;
 
     public PaymentStatus paymentStatus;
     public OrderStatus orderStatus;
