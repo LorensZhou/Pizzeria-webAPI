@@ -159,6 +159,22 @@ public class OrderService {
         return OrderMapper.toDto(updatedOrder);
     }
 
+    public void deleteOrder(Long id) {
+        if (!orderRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Order not found with id: " + id);
+        }
+        orderRepository.deleteById(id);
+    }
+
+    public void deleteOrderItem(Long id, int itemId) {
+        Order order = orderRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Order not found"));
+        Item item = itemRepository.findById(itemId).orElseThrow(()-> new ResourceNotFoundException("Item not found"));
+
+        OrderDetail orderDetailToDelete = detailRepository.findByOrderAndItem(order, item)
+                .orElseThrow(()-> new ResourceNotFoundException("Item with id: " + item.getId() + " not found in the order " + order.getId())
+                );
+        detailRepository.delete(orderDetailToDelete);
+    }
 
     //helper functie voor berekening totale bedrag van de order
     private void updateOrderTotalAmount(Order order){
