@@ -28,4 +28,9 @@ public class ExceptionController{
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
 
+    @ExceptionHandler(InvalidDeletionException.class)
+    public ResponseEntity<String> handleInvalidDeletion(InvalidDeletionException ex){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
+
 }

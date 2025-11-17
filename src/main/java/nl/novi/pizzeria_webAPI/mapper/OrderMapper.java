@@ -50,21 +50,6 @@ public class OrderMapper {
         return orderOutputDto;
     }
 
-
-    public static Order toEntityByPatch(OrderInputDto orderInputDto) {
-        Order order = new Order();
-
-        order.setCustomerNum(orderInputDto.customerNum);
-        order.setEmployeeNum(orderInputDto.employeeNum);
-        //hier kan de orderDate gewoon worden gevuld met orderInputDto.orderDate
-        order.setOrderDate(orderInputDto.orderDate);
-
-        order.setPaymentStatus(orderInputDto.paymentStatus);
-        order.setOrderStatus(orderInputDto.orderStatus);
-
-        return order;
-    }
-
     public static DetailOutputDto toDetailDto(OrderDetail orderDetail){
         DetailOutputDto detailOutDto = new DetailOutputDto();
         detailOutDto.id = orderDetail.getId();
