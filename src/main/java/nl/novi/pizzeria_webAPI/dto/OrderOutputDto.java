@@ -2,16 +2,18 @@ package nl.novi.pizzeria_webAPI.dto;
 
 import nl.novi.pizzeria_webAPI.model.OrderStatus;
 import nl.novi.pizzeria_webAPI.model.PaymentStatus;
-import nl.novi.pizzeria_webAPI.model.PaymentType;
+
+import java.time.LocalDate;
+import java.util.Set;
 
 public class OrderOutputDto {
-    public long orderId;
+    public long id;
     public int customerNum;
     public int employeeNum;
-    public int menuItemNum;
+    public Set<DetailOutputDto> detailOutputDtos;
     public double orderAmount;
+    public LocalDate orderDate;
 
-    public PaymentType paymentType;
     public PaymentStatus paymentStatus;
     public OrderStatus orderStatus;
 }

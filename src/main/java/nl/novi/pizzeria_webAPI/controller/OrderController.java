@@ -20,13 +20,6 @@ public class OrderController {
         this.service = service;
     }
 
-    @PostMapping("")
-    public ResponseEntity<OrderOutputDto>createOrder(@Valid @RequestBody OrderInputDto orderInputDto) {
-
-        OrderOutputDto orderOutputDto = this.service.createOrder(orderInputDto);
-        return new ResponseEntity<>(orderOutputDto, HttpStatus.CREATED);
-    }
-
     @GetMapping
     public ResponseEntity<List<OrderOutputDto>>getAllOrders(){
         return ResponseEntity.ok(this.service.getAllOrders());
@@ -38,9 +31,40 @@ public class OrderController {
         return ResponseEntity.ok(this.service.getOrderById(id));
     }
 
-    @PatchMapping("/{id}")
-    public ResponseEntity<OrderOutputDto>updatePerson(@PathVariable long id, @RequestParam int newMenuItemNum){
-        OrderOutputDto orderOutputDto = this.service.updateMenuItemNum(id, newMenuItemNum);
+    @PostMapping("")
+    public ResponseEntity<OrderOutputDto>createOrder(@Valid @RequestBody OrderInputDto orderInputDto) {
+
+        OrderOutputDto orderOutputDto = this.service.createOrder(orderInputDto);
+        return new ResponseEntity<>(orderOutputDto, HttpStatus.CREATED);
+    }
+
+    @PatchMapping("/{id}/addItem")
+    public ResponseEntity<OrderOutputDto>updateOrderAddItem(@PathVariable long id, @RequestParam int newItemId, @RequestParam int quantity){
+        OrderOutputDto orderOutputDto = this.service.updateOrderAddItem(id, newItemId, quantity);
         return ResponseEntity.ok(orderOutputDto);
+    }
+
+    @PatchMapping("/{id}/updateQuantity")
+    public ResponseEntity<OrderOutputDto>updateOrderItemQ(@PathVariable long id, @RequestParam int itemId, @RequestParam int quantity){
+        OrderOutputDto orderOutputDto = this.service.updateOrderItemQ(id, itemId, quantity);
+        return ResponseEntity.ok(orderOutputDto);
+    }
+
+    @PatchMapping("/{id}/{action}")
+    public ResponseEntity<OrderOutputDto>updateOrderByAction(@PathVariable long id, @PathVariable String action){
+        OrderOutputDto orderOutputDto = this.service.updateOrderByAction(id, action);
+        return ResponseEntity.ok(orderOutputDto);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void>deleteOrder(@PathVariable Long id){
+        this.service.deleteOrder(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/{id}/item")
+    public ResponseEntity<Void>deleteOrderItem(@PathVariable Long id, @RequestParam int itemId){
+        this.service.deleteOrderItem(id, itemId);
+                return ResponseEntity.noContent().build();
     }
 }
