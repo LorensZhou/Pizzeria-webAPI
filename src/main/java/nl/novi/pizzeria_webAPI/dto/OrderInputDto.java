@@ -19,9 +19,10 @@ public class OrderInputDto {
     @Min(value=1, message = "The employee number should be greater than 0.")
     public Integer employeeNum;
 
+    @NotNull(message= "Order details are required")
     public Set<DetailInputDto> detailInputDtos;;
-    public double orderAmount;
-    public LocalDate orderDate;
+    //orderAmount zal worden berekend door programma gebaseerd op detailInputDto
+    //orderDate zal worden gezet door @CreationTimestamp
 
     public PaymentStatus paymentStatus;
     public OrderStatus orderStatus;

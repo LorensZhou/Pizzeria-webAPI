@@ -8,9 +8,7 @@ import nl.novi.pizzeria_webAPI.dto.OrderOutputDto;
 import nl.novi.pizzeria_webAPI.exception.ResourceNotFoundException;
 import nl.novi.pizzeria_webAPI.mapper.OrderMapper;
 import nl.novi.pizzeria_webAPI.model.*;
-import nl.novi.pizzeria_webAPI.repository.ItemRepository;
-import nl.novi.pizzeria_webAPI.repository.OrderDetailRepository;
-import nl.novi.pizzeria_webAPI.repository.OrderRepository;
+import nl.novi.pizzeria_webAPI.repository.*;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -23,11 +21,20 @@ public class OrderService {
     private final OrderRepository orderRepos;
     private final ItemRepository itemRepos;
     private final OrderDetailRepository detailRepos;
+    private final EmployeeRepository employeeRepos;
+    private final CustomerRepository customerRepos;
 
-    public OrderService(OrderRepository orderRepos, ItemRepository itemRepos, OrderDetailRepository detailRepos) {
+    public OrderService(OrderRepository orderRepos,
+                        ItemRepository itemRepos,
+                        OrderDetailRepository detailRepos,
+                        EmployeeRepository employeeRepos,
+                        CustomerRepository customerRepos) {
+
         this.orderRepos = orderRepos;
         this.itemRepos = itemRepos;
         this.detailRepos = detailRepos;
+        this.employeeRepos = employeeRepos;
+        this.customerRepos = customerRepos;
     }
 
     public List<OrderOutputDto> getAllOrders() {
@@ -46,7 +53,18 @@ public class OrderService {
 
     @Transactional
     public OrderOutputDto createOrder(OrderInputDto orderInputDto) {
+
+        Employee employee = employeeRepos.findById(orderInputDto.employeeNum)
+                .orElseThrow(()->new ResourceNotFoundException("Employee not found"));
+
+        Customer customer = customerRepos.findById(orderInputDto.employeeNum)
+                .orElseThrow(()->new ResourceNotFoundException("Customer not found"));
+
         Order order = OrderMapper.toEntity(orderInputDto);
+        //het vullen van employeeNum wordt hier gedaan en niet in de ordermapper
+        //het vullen van customerNum wordt hier gedaan en niet in de ordermapper
+        order.setEmployee(employee);
+        order.setCustomer(customer);
 
         Set<OrderDetail> orderDetails = new HashSet<>();
         double calculatedTotalAmount = 0.0;
