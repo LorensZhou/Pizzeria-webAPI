@@ -6,7 +6,7 @@ import nl.novi.pizzeria_webAPI.model.Customer;
 
 public class CustomerMapper {
 
-    public Customer toEntity(CustomerInputDto customerInputDto) {
+    public static Customer toEntity(CustomerInputDto customerInputDto) {
 
         Customer customer = new Customer();
         customer.setName(customerInputDto.name);
@@ -15,7 +15,7 @@ public class CustomerMapper {
         return customer;
     }
 
-    public CustomerOutputDto toDto(Customer customer) {
+    public static CustomerOutputDto toDto(Customer customer) {
 
         CustomerOutputDto customerOutDto = new CustomerOutputDto();
         customerOutDto.id = customer.getId();

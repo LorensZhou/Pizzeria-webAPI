@@ -6,7 +6,7 @@ import nl.novi.pizzeria_webAPI.model.Invoice;
 
 public class InvoiceMapper {
 
-    public Invoice toEntity(InvoiceInputDto invoiceInputDto) {
+    public static Invoice toEntity(InvoiceInputDto invoiceInputDto) {
 
         Invoice invoice = new Invoice();
         invoice.setInvoiceRef(invoiceInputDto.invoiceRef);
@@ -16,7 +16,7 @@ public class InvoiceMapper {
         return invoice;
     }
 
-    public InvoiceOutputDto toDto(Invoice invoice) {
+    public static InvoiceOutputDto toDto(Invoice invoice) {
 
         InvoiceOutputDto invoiceOutputDto = new InvoiceOutputDto();
         invoiceOutputDto.id = invoice.getId();

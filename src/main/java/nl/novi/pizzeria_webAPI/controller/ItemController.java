@@ -44,6 +44,12 @@ public class ItemController {
         return ResponseEntity.ok(this.service.getItemById(id));
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<ItemOutputDto> replaceItem(@PathVariable int id, @Valid @RequestBody ItemInputDto itemInputDto) {
+        ItemOutputDto itemOutputDto = this.service.replaceItem(id, itemInputDto);
+        return ResponseEntity.ok(itemOutputDto);
+    }
+
 }
 
 

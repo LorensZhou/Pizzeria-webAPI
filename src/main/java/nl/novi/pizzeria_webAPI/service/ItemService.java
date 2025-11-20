@@ -58,4 +58,15 @@ public class ItemService {
                 .findById(id)
                 .orElseThrow(()->new ResourceNotFoundException("Item not found with id " + id)));
     }
+
+    public ItemOutputDto replaceItem(int id, ItemInputDto itemInputDto) {
+        Item existingItem = itemRepos.findById(id).orElseThrow(()-> new ResourceNotFoundException("Item not found"));
+
+        existingItem.setName(itemInputDto.name);
+        existingItem.setPrice(itemInputDto.price);
+
+        Item updatedItem = this.itemRepos.save(existingItem);
+
+        return ItemMapper.toDto(updatedItem);
+    }
 }
