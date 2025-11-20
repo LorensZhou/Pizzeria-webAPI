@@ -7,6 +7,7 @@ import nl.novi.pizzeria_webAPI.exception.ResourceNotFoundException;
 import nl.novi.pizzeria_webAPI.mapper.EmployeeMapper;
 import nl.novi.pizzeria_webAPI.model.Employee;
 import nl.novi.pizzeria_webAPI.repository.EmployeeRepository;
+import nl.novi.pizzeria_webAPI.repository.OrderRepository;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
@@ -16,9 +17,11 @@ import java.util.List;
 public class EmployeeService {
 
     private final EmployeeRepository employeeRepos;
+    private final OrderRepository orderRepos;
 
-    public EmployeeService(EmployeeRepository employeeRepos) {
+    public EmployeeService(EmployeeRepository employeeRepos, OrderRepository orderRepos) {
         this.employeeRepos = employeeRepos;
+        this.orderRepos = orderRepos;
     }
 
     public EmployeeOutputDto createEmployee(EmployeeInputDto employeeInDto) {
@@ -30,6 +33,14 @@ public class EmployeeService {
     public EmployeeOutputDto replaceEmployee(int id, EmployeeInputDto employeeInDto) {
         Employee existingEmployee = this.employeeRepos.findById(id)
                 .orElseThrow(()->new ResourceNotFoundException("Employee with id " + id + " not found"));
+
+        if(orderRepos.existsByEmployee(existingEmployee)){
+            throw new InvalidDeletionException("Employee with id "
+                    + id
+                    + " can not be updated, because it is part of an existing order. "
+                    + "To preserve the integrity of past orders, updates are forbidden.");
+        }
+
         existingEmployee.setName(employeeInDto.name);
         existingEmployee.setLastname(employeeInDto.lastname);
 
@@ -55,7 +66,9 @@ public class EmployeeService {
             this.employeeRepos.deleteById(id);
         }
         catch(DataIntegrityViolationException e) {
-            throw new InvalidDeletionException("Employee with id " + id + " can not be deleted. Delete the employee first from the order(s)");
+            throw new InvalidDeletionException("Employee with id "
+                                               + id
+                                               + " can not be deleted. Delete the employee first from the order(s)");
         }
     }
     

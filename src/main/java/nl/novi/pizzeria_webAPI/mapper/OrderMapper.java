@@ -19,6 +19,7 @@ public class OrderMapper {
         //het vullen van order.customerNum wordt gedaan in service laag d.m.v. customer object
         //het vullen van orderInputDto.employeeNum wordt gedaan in de service laag d.m.v. employee object
         //het vullen van order.orderDetails wordt gedaan in OrderService
+        order.setOrderReference("");
         order.setPaymentStatus(PaymentStatus.TOPAY);
         order.setOrderStatus(OrderStatus.CREATED);
 

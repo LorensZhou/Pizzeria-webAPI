@@ -12,4 +12,6 @@ public interface OrderDetailRepository extends JpaRepository<OrderDetail, Long> 
     //een eigen find declareren voor zoeken van orderdetail aan de hand van order en item
     Optional<OrderDetail> findByOrderAndItem(Order order, Item item);
 
+    //check doen of de item al bestaat in een orderdetail
+    boolean existsByItem(Item item);
 }

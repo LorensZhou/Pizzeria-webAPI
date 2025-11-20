@@ -47,8 +47,10 @@ public class OrderService {
     }
 
     public OrderOutputDto getOrderById(Long id) {
-        return OrderMapper.toDto(
+        OrderOutputDto orderOutputDto = OrderMapper.toDto(
                 this.orderRepos.findById(id).orElseThrow(()->new ResourceNotFoundException("Order not found")));
+
+        return addEmployeeAndCustomerName(orderOutputDto);
     }
 
     @Transactional
@@ -94,7 +96,7 @@ public class OrderService {
         //opslaan order als parent (cascade save voor OrderDetails met juiste foreign key)
         orderRepos.save(order);
 
-        return OrderMapper.toDto(order);
+        return addEmployeeAndCustomerName(OrderMapper.toDto(order));
     }
 
     @Transactional
@@ -125,7 +127,7 @@ public class OrderService {
         updateOrderTotalAmount(existingOrder);
         //opslaan van de order, hierdoor wordt door cascade de nieuwe orderDetail ook opgeslagen
         Order updatedOrder = orderRepos.save(existingOrder);
-        return OrderMapper.toDto(updatedOrder);
+        return addEmployeeAndCustomerName(OrderMapper.toDto(updatedOrder));
     }
 
     @Transactional
@@ -144,7 +146,7 @@ public class OrderService {
         updateOrderTotalAmount(existingOrder);
 
         Order updatedOrder = orderRepos.save(existingOrder);
-        return OrderMapper.toDto(updatedOrder);
+        return addEmployeeAndCustomerName(OrderMapper.toDto(updatedOrder));
     }
 
     //order aanpassen voor de status afgehandeld en voor betaalstatus betaald
@@ -173,7 +175,7 @@ public class OrderService {
         }
 
         Order updatedOrder = orderRepos.save(existingOrder);
-        return OrderMapper.toDto(updatedOrder);
+        return addEmployeeAndCustomerName(OrderMapper.toDto(updatedOrder));
     }
 
     public void deleteOrder(Long id) {
@@ -202,5 +204,29 @@ public class OrderService {
             }
         }
         order.setOrderAmount(totalAmount);
+    }
+
+    //helper functie retourneert orderOutputDto met employeeName en customerName
+    private OrderOutputDto addEmployeeAndCustomerName(OrderOutputDto orderOutputDto){
+
+        Employee employee = this.employeeRepos.findById(orderOutputDto.employeeNum)
+                .orElseThrow(()->new ResourceNotFoundException("Employee not found for this order with id: " + orderOutputDto.employeeNum));
+        if(employee.getLastname() != null && !employee.getLastname().isEmpty()) {
+            orderOutputDto.employeeName = employee.getName() + " " + employee.getLastname();
+        }
+        else {
+            orderOutputDto.employeeName = employee.getName();
+        }
+
+        Customer customer = this.customerRepos.findById(orderOutputDto.customerNum)
+                .orElseThrow(()->new ResourceNotFoundException("Customer not found for this order with id: " + orderOutputDto.customerNum));
+        if(customer.getLastname() != null && !customer.getLastname().isEmpty()) {
+            orderOutputDto.customerName = customer.getName() + " " + customer.getLastname();
+        }
+        else {
+            orderOutputDto.customerName = customer.getName();
+        }
+
+        return orderOutputDto;
     }
 }

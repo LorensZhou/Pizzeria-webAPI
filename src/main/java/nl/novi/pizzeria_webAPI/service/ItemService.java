@@ -1,6 +1,5 @@
 package nl.novi.pizzeria_webAPI.service;
 
-
 import nl.novi.pizzeria_webAPI.dto.ItemInputDto;
 import nl.novi.pizzeria_webAPI.dto.ItemOutputDto;
 import nl.novi.pizzeria_webAPI.exception.InvalidDeletionException;
@@ -8,6 +7,7 @@ import nl.novi.pizzeria_webAPI.exception.ResourceNotFoundException;
 import nl.novi.pizzeria_webAPI.mapper.ItemMapper;
 import nl.novi.pizzeria_webAPI.model.Item;
 import nl.novi.pizzeria_webAPI.repository.ItemRepository;
+import nl.novi.pizzeria_webAPI.repository.OrderDetailRepository;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
@@ -17,9 +17,11 @@ import java.util.List;
 public class ItemService {
 
     private final ItemRepository itemRepos;
+    private final OrderDetailRepository detailRepos;
 
-    public ItemService(ItemRepository itemRepos){
+    public ItemService(ItemRepository itemRepos, OrderDetailRepository detailRepos){
         this.itemRepos = itemRepos;
+        this.detailRepos = detailRepos;
     }
 
     public ItemOutputDto createItem(ItemInputDto itemInputDto) {
@@ -62,6 +64,12 @@ public class ItemService {
     public ItemOutputDto replaceItem(int id, ItemInputDto itemInputDto) {
         Item existingItem = itemRepos.findById(id).orElseThrow(()-> new ResourceNotFoundException("Item not found"));
 
+        if(detailRepos.existsByItem(existingItem)){
+            throw new InvalidDeletionException("Item with id "
+                                  + id
+                                  + " can not be updated, because it is part of an existing order. "
+                                  + "To preserve the integrity of past orders, updates are forbidden.");
+        }
         existingItem.setName(itemInputDto.name);
         existingItem.setPrice(itemInputDto.price);
 
