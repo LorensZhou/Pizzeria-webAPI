@@ -3,6 +3,7 @@ package nl.novi.pizzeria_webAPI.service;
 import nl.novi.pizzeria_webAPI.dto.EmployeeInputDto;
 import nl.novi.pizzeria_webAPI.dto.EmployeeOutputDto;
 import nl.novi.pizzeria_webAPI.exception.InvalidDeletionException;
+import nl.novi.pizzeria_webAPI.exception.InvalidReplaceException;
 import nl.novi.pizzeria_webAPI.exception.ResourceNotFoundException;
 import nl.novi.pizzeria_webAPI.mapper.EmployeeMapper;
 import nl.novi.pizzeria_webAPI.model.Employee;
@@ -34,8 +35,8 @@ public class EmployeeService {
         Employee existingEmployee = this.employeeRepos.findById(id)
                 .orElseThrow(()->new ResourceNotFoundException("Employee with id " + id + " not found"));
 
-        if(orderRepos.existsByEmployee(existingEmployee)){
-            throw new InvalidDeletionException("Employee with id "
+        if(this.orderRepos.existsByEmployee(existingEmployee)){
+            throw new InvalidReplaceException("Employee with id "
                     + id
                     + " can not be updated, because it is part of an existing order. "
                     + "To preserve the integrity of past orders, updates are forbidden.");

@@ -11,6 +11,7 @@ import nl.novi.pizzeria_webAPI.model.*;
 import nl.novi.pizzeria_webAPI.repository.*;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -40,10 +41,15 @@ public class OrderService {
     public List<OrderOutputDto> getAllOrders() {
         List<Order> orders = this.orderRepos.findAll();
 
-        return orders
-                .stream()
-                .map(OrderMapper::toDto)
-                .toList();
+        List<OrderOutputDto> orderOutputDtos = orders
+                                               .stream()
+                                               .map(OrderMapper::toDto)
+                                               .toList();
+        for(OrderOutputDto orderOutputDto : orderOutputDtos) {
+            addEmployeeAndCustomerName(orderOutputDto);
+        }
+
+        return orderOutputDtos;
     }
 
     public OrderOutputDto getOrderById(Long id) {
@@ -56,10 +62,10 @@ public class OrderService {
     @Transactional
     public OrderOutputDto createOrder(OrderInputDto orderInputDto) {
 
-        Employee employee = employeeRepos.findById(orderInputDto.employeeNum)
+        Employee employee = this.employeeRepos.findById(orderInputDto.employeeNum)
                 .orElseThrow(()->new ResourceNotFoundException("Employee not found"));
 
-        Customer customer = customerRepos.findById(orderInputDto.employeeNum)
+        Customer customer = this.customerRepos.findById(orderInputDto.employeeNum)
                 .orElseThrow(()->new ResourceNotFoundException("Customer not found"));
 
         Order order = OrderMapper.toEntity(orderInputDto);
@@ -74,7 +80,7 @@ public class OrderService {
         if(orderInputDto.detailInputDtos !=null){
             for (DetailInputDto detailInputDto : orderInputDto.detailInputDtos)
             {
-                Item item = itemRepos
+                Item item = this.itemRepos
                         .findById(detailInputDto.itemId)
                         .orElseThrow(()->new ResourceNotFoundException("Item not found with id: " + detailInputDto.itemId));
 
@@ -94,7 +100,7 @@ public class OrderService {
         order.setOrderDetails(orderDetails);
         order.setOrderAmount(calculatedTotalAmount);
         //opslaan order als parent (cascade save voor OrderDetails met juiste foreign key)
-        orderRepos.save(order);
+        this.orderRepos.save(order);
 
         return addEmployeeAndCustomerName(OrderMapper.toDto(order));
     }
@@ -102,8 +108,8 @@ public class OrderService {
     @Transactional
     public OrderOutputDto updateOrderAddItem(long id, int newItemId, int quantity) {
 
-        Order existingOrder = orderRepos.findById(id).orElseThrow(()-> new ResourceNotFoundException("Order not found"));
-        Item newItem = itemRepos.findById(newItemId).orElseThrow(()-> new ResourceNotFoundException("Item not found"));
+        Order existingOrder = this.orderRepos.findById(id).orElseThrow(()-> new ResourceNotFoundException("Order not found"));
+        Item newItem = this.itemRepos.findById(newItemId).orElseThrow(()-> new ResourceNotFoundException("Item not found"));
 
         //maak een nieuwe OrderDetail aan
         OrderDetail newOrderDetail = new OrderDetail();
@@ -126,18 +132,18 @@ public class OrderService {
 
         updateOrderTotalAmount(existingOrder);
         //opslaan van de order, hierdoor wordt door cascade de nieuwe orderDetail ook opgeslagen
-        Order updatedOrder = orderRepos.save(existingOrder);
+        Order updatedOrder = this.orderRepos.save(existingOrder);
         return addEmployeeAndCustomerName(OrderMapper.toDto(updatedOrder));
     }
 
     @Transactional
     public OrderOutputDto updateOrderItemQ(long id, int itemId, int quantity) {
 
-        Order existingOrder = orderRepos.findById(id).orElseThrow(()-> new ResourceNotFoundException("Order not found"));
-        Item item = itemRepos.findById(itemId).orElseThrow(()-> new ResourceNotFoundException("Item not found"));
+        Order existingOrder = this.orderRepos.findById(id).orElseThrow(()-> new ResourceNotFoundException("Order not found"));
+        Item item = this.itemRepos.findById(itemId).orElseThrow(()-> new ResourceNotFoundException("Item not found"));
 
 
-        OrderDetail orderDetail = detailRepos.findByOrderAndItem(existingOrder, item)
+        OrderDetail orderDetail = this.detailRepos.findByOrderAndItem(existingOrder, item)
                 .orElseThrow(()-> new ResourceNotFoundException("Item with id: " + item.getId() + " not found in the order " + existingOrder.getId())
                             );
         //de hoeveelheid wordt in de orderdetail aangepast
@@ -145,7 +151,7 @@ public class OrderService {
         //er wordt een nieuwe berekening gemaakt van het totaal bedrag in de order
         updateOrderTotalAmount(existingOrder);
 
-        Order updatedOrder = orderRepos.save(existingOrder);
+        Order updatedOrder = this.orderRepos.save(existingOrder);
         return addEmployeeAndCustomerName(OrderMapper.toDto(updatedOrder));
     }
 
@@ -153,7 +159,7 @@ public class OrderService {
     @Transactional
     public OrderOutputDto updateOrderByAction(long id, String action) {
 
-        Order existingOrder = orderRepos.findById(id).orElseThrow(()-> new ResourceNotFoundException("Order not found"));
+        Order existingOrder = this.orderRepos.findById(id).orElseThrow(()-> new ResourceNotFoundException("Order not found"));
         switch (action) {
             case "orderCompleted":
                 if(existingOrder.getOrderStatus() == OrderStatus.COMPLETED){
@@ -174,25 +180,25 @@ public class OrderService {
             default: throw new IllegalArgumentException("This action (" + action + ") is not valid");
         }
 
-        Order updatedOrder = orderRepos.save(existingOrder);
+        Order updatedOrder = this.orderRepos.save(existingOrder);
         return addEmployeeAndCustomerName(OrderMapper.toDto(updatedOrder));
     }
 
     public void deleteOrder(Long id) {
-        if (!orderRepos.existsById(id)) {
+        if (!this.orderRepos.existsById(id)) {
             throw new ResourceNotFoundException("Order not found with id: " + id);
         }
-        orderRepos.deleteById(id);
+        this.orderRepos.deleteById(id);
     }
 
     public void deleteOrderItem(Long id, int itemId) {
-        Order order = orderRepos.findById(id).orElseThrow(()-> new ResourceNotFoundException("Order not found"));
-        Item item = itemRepos.findById(itemId).orElseThrow(()-> new ResourceNotFoundException("Item not found"));
+        Order order = this.orderRepos.findById(id).orElseThrow(()-> new ResourceNotFoundException("Order not found"));
+        Item item = this.itemRepos.findById(itemId).orElseThrow(()-> new ResourceNotFoundException("Item not found"));
 
-        OrderDetail orderDetailToDelete = detailRepos.findByOrderAndItem(order, item)
+        OrderDetail orderDetailToDelete = this.detailRepos.findByOrderAndItem(order, item)
                 .orElseThrow(()-> new ResourceNotFoundException("Item with id: " + item.getId() + " not found in the order " + order.getId())
                 );
-        detailRepos.delete(orderDetailToDelete);
+        this.detailRepos.delete(orderDetailToDelete);
     }
 
     //helper functie voor berekening totale bedrag van de order
