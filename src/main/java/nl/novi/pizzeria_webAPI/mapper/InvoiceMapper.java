@@ -3,15 +3,15 @@ package nl.novi.pizzeria_webAPI.mapper;
 import nl.novi.pizzeria_webAPI.dto.InvoiceInputDto;
 import nl.novi.pizzeria_webAPI.dto.InvoiceOutputDto;
 import nl.novi.pizzeria_webAPI.model.Invoice;
+import nl.novi.pizzeria_webAPI.model.InvoiceStatus;
 
 public class InvoiceMapper {
 
     public static Invoice toEntity(InvoiceInputDto invoiceInputDto) {
 
         Invoice invoice = new Invoice();
-        invoice.setInvoiceRef(invoiceInputDto.invoiceRef);
         //het vullen van invoice.orderNum wordt gedaan in service laag d.m.v. order object
-        invoice.setInvoiceStatus(invoiceInputDto.invoiceStatus);
+        invoice.setInvoiceStatus(InvoiceStatus.CREATED);
 
         return invoice;
     }
@@ -20,8 +20,8 @@ public class InvoiceMapper {
 
         InvoiceOutputDto invoiceOutputDto = new InvoiceOutputDto();
         invoiceOutputDto.id = invoice.getId();
-        invoiceOutputDto.invoiceRef = invoice.getInvoiceRef();
         invoiceOutputDto.invoiceStatus = invoice.getInvoiceStatus();
+        //de rest van de attributen worden gevuld in de service laag
 
         return invoiceOutputDto;
 

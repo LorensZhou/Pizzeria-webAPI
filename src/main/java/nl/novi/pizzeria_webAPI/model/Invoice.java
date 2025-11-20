@@ -16,7 +16,6 @@ public class Invoice {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private String invoiceRef;
 
     //Invoice is niet de eigenaar, is de target
     @OneToOne(mappedBy="invoice")
