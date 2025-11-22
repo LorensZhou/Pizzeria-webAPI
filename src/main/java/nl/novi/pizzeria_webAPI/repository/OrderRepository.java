@@ -7,9 +7,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface OrderRepository extends JpaRepository<Order,Long> {
 
-    //check doen of de employee al bestaat in een order
+    //check doen of de employee al bestaat in een order, dan mogen wij de employee naam niet aanpassen
     boolean existsByEmployee(Employee employee);
 
-    //check doen of de customer al bestaat in een order
+    //check doen of de customer al bestaat in een order, dan mogen wij de customer naam niet aanpassen
     boolean existsByCustomer(Customer customer);
 }

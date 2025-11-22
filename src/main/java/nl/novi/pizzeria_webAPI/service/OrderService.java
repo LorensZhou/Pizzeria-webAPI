@@ -11,7 +11,6 @@ import nl.novi.pizzeria_webAPI.model.*;
 import nl.novi.pizzeria_webAPI.repository.*;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -82,7 +81,8 @@ public class OrderService {
             {
                 Item item = this.itemRepos
                         .findById(detailInputDto.itemId)
-                        .orElseThrow(()->new ResourceNotFoundException("Item not found with id: " + detailInputDto.itemId));
+                        .orElseThrow(()->new ResourceNotFoundException("Item not found with id: "
+                                                                        + detailInputDto.itemId));
 
                 //aanmaken en vullen de nieuwe orderDetail
                 OrderDetail newOrderDetail = new OrderDetail();
@@ -144,7 +144,9 @@ public class OrderService {
 
 
         OrderDetail orderDetail = this.detailRepos.findByOrderAndItem(existingOrder, item)
-                .orElseThrow(()-> new ResourceNotFoundException("Item with id: " + item.getId() + " not found in the order " + existingOrder.getId())
+                .orElseThrow(()-> new ResourceNotFoundException("Item with id: " + item.getId()
+                                + " not found in the order "
+                                + existingOrder.getId())
                             );
         //de hoeveelheid wordt in de orderdetail aangepast
         orderDetail.setItemQuantity(quantity);
@@ -188,6 +190,8 @@ public class OrderService {
         if (!this.orderRepos.existsById(id)) {
             throw new ResourceNotFoundException("Order not found with id: " + id);
         }
+        //door deze delete operatie wordt the invoice gekoppeld aan de order ook automatisch verwijderd via cascase.remove.
+        //omdat de order aan de owner zijde is en de invoice is de target zijde.
         this.orderRepos.deleteById(id);
     }
 
@@ -196,7 +200,10 @@ public class OrderService {
         Item item = this.itemRepos.findById(itemId).orElseThrow(()-> new ResourceNotFoundException("Item not found"));
 
         OrderDetail orderDetailToDelete = this.detailRepos.findByOrderAndItem(order, item)
-                .orElseThrow(()-> new ResourceNotFoundException("Item with id: " + item.getId() + " not found in the order " + order.getId())
+                .orElseThrow(()-> new ResourceNotFoundException("Item with id: "
+                                                               + item.getId()
+                                                               + " not found in order "
+                                                               + order.getId())
                 );
         this.detailRepos.delete(orderDetailToDelete);
     }
@@ -216,7 +223,9 @@ public class OrderService {
     private OrderOutputDto addEmployeeAndCustomerName(OrderOutputDto orderOutputDto){
 
         Employee employee = this.employeeRepos.findById(orderOutputDto.employeeNum)
-                .orElseThrow(()->new ResourceNotFoundException("Employee not found for this order with id: " + orderOutputDto.employeeNum));
+                .orElseThrow(()->new ResourceNotFoundException("Employee not found for this order with id: "
+                                                                + orderOutputDto.employeeNum));
+
         if(employee.getLastname() != null && !employee.getLastname().isEmpty()) {
             orderOutputDto.employeeName = employee.getName() + " " + employee.getLastname();
         }
@@ -225,7 +234,9 @@ public class OrderService {
         }
 
         Customer customer = this.customerRepos.findById(orderOutputDto.customerNum)
-                .orElseThrow(()->new ResourceNotFoundException("Customer not found for this order with id: " + orderOutputDto.customerNum));
+                .orElseThrow(()->new ResourceNotFoundException("Customer not found for this order with id: "
+                                                                + orderOutputDto.customerNum));
+
         if(customer.getLastname() != null && !customer.getLastname().isEmpty()) {
             orderOutputDto.customerName = customer.getName() + " " + customer.getLastname();
         }

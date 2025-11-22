@@ -4,7 +4,6 @@ package nl.novi.pizzeria_webAPI.controller;
 import jakarta.validation.Valid;
 import nl.novi.pizzeria_webAPI.dto.ItemInputDto;
 import nl.novi.pizzeria_webAPI.dto.ItemOutputDto;
-import nl.novi.pizzeria_webAPI.model.Item;
 import nl.novi.pizzeria_webAPI.service.ItemService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

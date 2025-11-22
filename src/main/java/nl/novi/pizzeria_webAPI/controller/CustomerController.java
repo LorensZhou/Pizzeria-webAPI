@@ -3,7 +3,6 @@ package nl.novi.pizzeria_webAPI.controller;
 import jakarta.validation.Valid;
 import nl.novi.pizzeria_webAPI.dto.CustomerInputDto;
 import nl.novi.pizzeria_webAPI.dto.CustomerOutputDto;
-import nl.novi.pizzeria_webAPI.model.Customer;
 import nl.novi.pizzeria_webAPI.service.CustomerService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

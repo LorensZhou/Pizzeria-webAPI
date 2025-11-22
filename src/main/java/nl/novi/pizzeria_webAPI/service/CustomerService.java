@@ -64,7 +64,9 @@ public class CustomerService {
         }
         try {this.customerRepos.deleteById(id);}
         catch(DataIntegrityViolationException e){
-            throw new InvalidDeletionException("Customer with id " + id + " can not be deleted. Delete first the order(s) from this customer");
+            throw new InvalidDeletionException("Customer with id "
+                                                + id
+                                                + " can not be deleted. Delete first the order(s) from this customer");
         }
     }
 

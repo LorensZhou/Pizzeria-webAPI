@@ -21,6 +21,7 @@ public class Invoice {
     @OneToOne(mappedBy="invoice")
     private Order order;
 
+    private double invoiceAmount;
     private InvoiceStatus invoiceStatus;
 
 }
