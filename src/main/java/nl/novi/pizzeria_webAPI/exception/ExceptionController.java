@@ -33,4 +33,9 @@ public class ExceptionController{
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
 
+    @ExceptionHandler(InvalidReplaceException.class)
+    public ResponseEntity<String> handleInvalidReplace(InvalidReplaceException ex){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
+
 }

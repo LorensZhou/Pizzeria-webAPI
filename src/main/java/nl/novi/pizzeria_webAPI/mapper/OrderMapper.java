@@ -16,9 +16,10 @@ public class OrderMapper {
     public static Order toEntity(OrderInputDto orderInputDto) {
         Order order = new Order();
 
-        order.setCustomerNum(orderInputDto.customerNum);
-        order.setEmployeeNum(orderInputDto.employeeNum);
+        //het vullen van order.customerNum wordt gedaan in service laag d.m.v. customer object
+        //het vullen van orderInputDto.employeeNum wordt gedaan in de service laag d.m.v. employee object
         //het vullen van order.orderDetails wordt gedaan in OrderService
+        order.setOrderReference("");
         order.setPaymentStatus(PaymentStatus.TOPAY);
         order.setOrderStatus(OrderStatus.CREATED);
 
@@ -29,8 +30,23 @@ public class OrderMapper {
         OrderOutputDto orderOutputDto = new OrderOutputDto();
 
         orderOutputDto.id = order.getId();
-        orderOutputDto.customerNum = order.getCustomerNum();
-        orderOutputDto.employeeNum = order.getEmployeeNum();
+        orderOutputDto.orderReference = order.getOrderReference();
+
+        //additionele beveiliging om null voor customer object op te vangen
+        if(order.getCustomer() != null) {
+            orderOutputDto.customerNum = order.getCustomer().getId();
+        }
+        else{
+            orderOutputDto.customerNum = 0;
+        }
+
+        //additionele beveiliging om null voor employee object op te vangen
+        if(order.getEmployee() != null) {
+            orderOutputDto.employeeNum = order.getEmployee().getId();
+        }
+        else{
+            orderOutputDto.employeeNum = 0;
+        }
 
         //nieuwe mapping, conversie van type orderDetails naar type orderDetailOutputDto
         if(order.getOrderDetails()!=null){

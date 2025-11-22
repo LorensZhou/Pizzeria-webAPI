@@ -8,8 +8,11 @@ import java.util.Set;
 
 public class OrderOutputDto {
     public long id;
+    public String orderReference;
     public int customerNum;
+    public String customerName;
     public int employeeNum;
+    public String employeeName;
     public Set<DetailOutputDto> detailOutputDtos;
     public double orderAmount;
     public LocalDate orderDate;
