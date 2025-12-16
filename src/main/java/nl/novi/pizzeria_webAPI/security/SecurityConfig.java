@@ -53,6 +53,7 @@ public class SecurityConfig  {
                         .requestMatchers(HttpMethod.POST, "/users").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth").permitAll()
                         .requestMatchers("/secret").hasRole("ADMIN")
+                        .requestMatchers("/roles").hasRole("ADMIN")
                         .requestMatchers("/hello").authenticated()
                         .requestMatchers("/profiles","/profiles/*").authenticated()
                         .anyRequest().denyAll()

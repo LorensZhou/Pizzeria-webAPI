@@ -4,6 +4,8 @@ import nl.novi.pizzeria_webAPI.dto.ProfileDto;
 import nl.novi.pizzeria_webAPI.model.Profile;
 import nl.novi.pizzeria_webAPI.repository.ProfileRepository;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -34,12 +36,16 @@ public class ProfileController {
     }
 
     @GetMapping("/{username}")
-    public ResponseEntity<ProfileDto> getProfile(@PathVariable String username) {
+    public ResponseEntity<ProfileDto> getProfile(@PathVariable String username, @AuthenticationPrincipal UserDetails userdetails) {
 
         Profile profile = this.profileRepos.findById(username).orElse(null);
 
         if(profile == null){
             return ResponseEntity.notFound().build();
+        }
+
+        if(!userdetails.getUsername().equals(username)){
+            return ResponseEntity.status(403).build();
         }
 
         ProfileDto profileDto = new ProfileDto();
