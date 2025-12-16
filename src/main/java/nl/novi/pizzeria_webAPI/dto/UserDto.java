@@ -1,6 +1,6 @@
 package nl.novi.pizzeria_webAPI.dto;
 
-public class UserInputDto {
+public class UserDto {
     public String username;
 
     public String password;

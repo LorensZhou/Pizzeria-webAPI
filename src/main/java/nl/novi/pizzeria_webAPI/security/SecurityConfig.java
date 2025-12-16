@@ -54,7 +54,7 @@ public class SecurityConfig  {
                         .requestMatchers(HttpMethod.POST, "/auth").permitAll()
                         .requestMatchers("/secret").hasRole("ADMIN")
                         .requestMatchers("/hello").authenticated()
-                        .requestMatchers("/profiles", "/profiles/*").authenticated()
+                        .requestMatchers("/profiles","/profiles/*").authenticated()
                         .anyRequest().denyAll()
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

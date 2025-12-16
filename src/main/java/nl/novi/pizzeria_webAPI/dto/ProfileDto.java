@@ -5,4 +5,5 @@ public class ProfileDto {
     public String name;
     public String lastname;
     public String address;
+    public String bankAccount;
 }

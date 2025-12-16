@@ -18,4 +18,5 @@ public class Profile {
     private String name;
     private String lastname;
     private String address;
+    private String bankAccount;
 }
