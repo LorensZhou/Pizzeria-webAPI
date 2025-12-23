@@ -13,3 +13,6 @@ insert into employees(name, lastname)
 values('Anne', 'Linhout'),
       ('Eric', 'Merel'),
       ('Steven', 'Stratenmaker');
+
+insert into roles(rolename)
+values ('ROLE_EMPLOYEE'), ('ROLE_CUSTOMER'), ('ROLE_ADMIN');
