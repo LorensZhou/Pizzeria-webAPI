@@ -54,6 +54,7 @@ public class SecurityConfig  {
                         .requestMatchers(HttpMethod.POST, "/auth").permitAll()
                         .requestMatchers("/secret").hasRole("ADMIN")
                         .requestMatchers("/roles").hasRole("ADMIN")
+                        .requestMatchers("/upload-file").authenticated()
                         .requestMatchers("/hello").authenticated()
                         .requestMatchers("/profiles","/profiles/*").authenticated()
                         .anyRequest().denyAll()
