@@ -33,7 +33,7 @@ public class InvoiceController {
         return ResponseEntity.ok(invoiceOutDto);
     }
 
-    @PatchMapping("{id}/printInvoice")
+    @PatchMapping("/{id}/printInvoice")
     public ResponseEntity<InvoiceOutputDto>printInvoice(@PathVariable long id){
         InvoiceOutputDto invoiceOutDto = this.service.printInvoice(id);
         return ResponseEntity.ok(invoiceOutDto);

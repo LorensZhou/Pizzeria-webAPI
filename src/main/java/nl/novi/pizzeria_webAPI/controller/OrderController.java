@@ -67,4 +67,6 @@ public class OrderController {
         this.service.deleteOrderItem(id, itemId);
                 return ResponseEntity.noContent().build();
     }
+
+    //getmapping voor customer met dezelfde customer id
 }
