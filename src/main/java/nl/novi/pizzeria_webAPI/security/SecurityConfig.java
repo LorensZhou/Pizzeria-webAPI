@@ -52,9 +52,11 @@ public class SecurityConfig  {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.POST, "/users").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth").permitAll()
+
                         .requestMatchers("/customers", "/customers/*").hasAnyRole("ADMIN", "EMPLOYEE")
                         .requestMatchers("/invoices", "/invoices/**").hasAnyRole("ADMIN", "EMPLOYEE")
                         .requestMatchers("/items", "/items/*").hasAnyRole("ADMIN", "EMPLOYEE")
+                        .requestMatchers("/orders/auth-customer/*").hasRole("CUSTOMER")
                         .requestMatchers("/orders", "/orders/**").hasAnyRole("ADMIN", "EMPLOYEE")
                         .requestMatchers("/employees", "/employees/*").hasRole("ADMIN")
                         .requestMatchers("/secret").hasRole("ADMIN")
@@ -63,6 +65,7 @@ public class SecurityConfig  {
                         .requestMatchers("/download-file").authenticated()
                         .requestMatchers("/hello").authenticated()
                         .requestMatchers("/profiles","/profiles/*").authenticated()
+                        .requestMatchers("/error").permitAll()
                         .anyRequest().denyAll()
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

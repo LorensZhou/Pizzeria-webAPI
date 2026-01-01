@@ -4,7 +4,6 @@ import nl.novi.pizzeria_webAPI.dto.ProfileDto;
 import nl.novi.pizzeria_webAPI.exception.RecordAlreadyExistsException;
 import nl.novi.pizzeria_webAPI.exception.ResourceNotFoundException;
 import nl.novi.pizzeria_webAPI.model.Profile;
-import nl.novi.pizzeria_webAPI.model.User;
 import nl.novi.pizzeria_webAPI.repository.ProfileRepository;
 import nl.novi.pizzeria_webAPI.repository.UserRepository;
 import org.springframework.http.ResponseEntity;
@@ -15,8 +14,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/profiles")
 public class ProfileController {
-
-    // No ProfileService used in demo code!
 
     private final ProfileRepository profileRepos;
     private final UserRepository userRepos;
@@ -29,9 +26,10 @@ public class ProfileController {
 
     @PostMapping
     public ResponseEntity<Profile> createProfile(@RequestBody ProfileDto profileDto) {
-        //haal de user op dat voor deze profile is aangemaakt
-        User user = userRepos.findById(profileDto.username)
-                .orElseThrow(()-> new ResourceNotFoundException("User not found"));
+
+        if (!userRepos.existsById(profileDto.username)) {
+            throw new ResourceNotFoundException("The user does not exist with username: " + profileDto.username);
+        }
 
         //check of de combinatie name en lastname al bestaat
         if(profileRepos.existsByNameAndLastname(profileDto.name, profileDto.lastname)) {
@@ -40,10 +38,7 @@ public class ProfileController {
 
         Profile profile = new Profile();
 
-        //profile.username is nu automatisch hetzelfde als profileDto.username, door de code @MapsId in Profile.java
-        //je hoeft niet meer deze code: profile.username = profileDto.username in te voeren
-        profile.setUser(user);
-
+        profile.setUsername(profileDto.username);
         profile.setName(profileDto.name);
         profile.setLastname(profileDto.lastname);
         profile.setAddress(profileDto.address);

@@ -23,7 +23,7 @@ public class FileManagerController {
     private FileStorageService fileStorageService;
     private static final Logger log = Logger.getLogger(FileManagerController.class.getName());
 
-    //inject dependencies
+    //injecteren dependencies
     public FileManagerController(FileStorageService fileStorageService) {
         this.fileStorageService = fileStorageService;
     }

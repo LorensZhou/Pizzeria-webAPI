@@ -1,7 +1,6 @@
 package nl.novi.pizzeria_webAPI.mapper;
 
 import nl.novi.pizzeria_webAPI.dto.DetailOutputDto;
-import nl.novi.pizzeria_webAPI.dto.OrderInputDto;
 import nl.novi.pizzeria_webAPI.dto.OrderOutputDto;
 import nl.novi.pizzeria_webAPI.model.Order;
 import nl.novi.pizzeria_webAPI.model.OrderDetail;
@@ -13,7 +12,7 @@ public class OrderMapper {
     //mapper heeft functie voor conversie van OrderDtos naar Order entities en andersom
     //mapper heeft functie voor conversie van DetailDtos naar OrderDetail entities
 
-    public static Order toEntity(OrderInputDto orderInputDto) {
+    public static Order toEntity() {
         Order order = new Order();
 
         //het vullen van order.customerNum wordt gedaan in service laag d.m.v. customer object
@@ -48,7 +47,7 @@ public class OrderMapper {
             orderOutputDto.employeeNum = 0;
         }
 
-        //nieuwe mapping, conversie van type orderDetails naar type orderDetailOutputDto
+        //nieuwe mapping, conversie van type OrderDetail naar type DetailOutputDto
         if(order.getOrderDetails()!=null){
             orderOutputDto.detailOutputDtos = order.getOrderDetails()
                     .stream()
@@ -66,6 +65,7 @@ public class OrderMapper {
         return orderOutputDto;
     }
 
+    //conversie van OrderDetail naar DetailOutputDto
     public static DetailOutputDto toDetailDto(OrderDetail orderDetail){
         DetailOutputDto detailOutDto = new DetailOutputDto();
         detailOutDto.id = orderDetail.getId();

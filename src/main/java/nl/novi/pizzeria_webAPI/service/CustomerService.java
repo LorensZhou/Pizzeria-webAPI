@@ -4,6 +4,7 @@ import nl.novi.pizzeria_webAPI.dto.CustomerInputDto;
 import nl.novi.pizzeria_webAPI.dto.CustomerOutputDto;
 import nl.novi.pizzeria_webAPI.exception.InvalidDeletionException;
 import nl.novi.pizzeria_webAPI.exception.InvalidReplaceException;
+import nl.novi.pizzeria_webAPI.exception.RecordAlreadyExistsException;
 import nl.novi.pizzeria_webAPI.exception.ResourceNotFoundException;
 import nl.novi.pizzeria_webAPI.mapper.CustomerMapper;
 import nl.novi.pizzeria_webAPI.model.Customer;
@@ -31,6 +32,12 @@ public class CustomerService {
     }
 
     public CustomerOutputDto createCustomer(CustomerInputDto customerInDto){
+
+        //check of de combinatie name en lastname al bestaat
+        if(customerRepos.existsByNameAndLastname(customerInDto.name, customerInDto.lastname)) {
+            throw new RecordAlreadyExistsException("A customer with this name and lastname already exists");
+        }
+
         //via customerInDto wordt customer entiteit opgeslagen
         Customer customer = CustomerMapper.toEntity(customerInDto);
 
@@ -86,6 +93,5 @@ public class CustomerService {
                                                 + " can not be deleted. Delete first the order(s) from this customer");
         }
     }
-
 }
 

@@ -3,9 +3,13 @@ package nl.novi.pizzeria_webAPI.controller;
 import jakarta.validation.Valid;
 import nl.novi.pizzeria_webAPI.dto.OrderInputDto;
 import nl.novi.pizzeria_webAPI.dto.OrderOutputDto;
+import nl.novi.pizzeria_webAPI.model.Profile;
+import nl.novi.pizzeria_webAPI.repository.ProfileRepository;
 import nl.novi.pizzeria_webAPI.service.OrderService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,9 +19,11 @@ import java.util.List;
 public class OrderController {
 
     private final OrderService service;
+    private final ProfileRepository profileRepos;
 
-    public OrderController(OrderService service) {
+    public OrderController(OrderService service, ProfileRepository profileRepos) {
         this.service = service;
+        this.profileRepos = profileRepos;
     }
 
     @GetMapping
@@ -68,5 +74,19 @@ public class OrderController {
                 return ResponseEntity.noContent().build();
     }
 
-    //getmapping voor customer met dezelfde customer id
+    //getmapping voor ingelogde customer met een profiel
+    @GetMapping("/auth-customer/{username}")
+    public ResponseEntity<List<OrderOutputDto>>getOrdersAuthCustomer(@PathVariable String username, @AuthenticationPrincipal UserDetails userdetails){
+        Profile profile = this.profileRepos.findById(username).orElse(null);
+
+        if(profile == null){
+            return ResponseEntity.notFound().build();
+        }
+
+        //Deze endpoint is alleen toegankelijk voor de customer met de opgegeven username
+        if(!userdetails.getUsername().equals(username)){
+            return ResponseEntity.status(403).build();
+        }
+        return ResponseEntity.ok(this.service.getOrdersAuthCustomer(profile));
+    }
 }

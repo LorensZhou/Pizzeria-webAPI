@@ -40,15 +40,11 @@ public class OrderService {
     public List<OrderOutputDto> getAllOrders() {
         List<Order> orders = this.orderRepos.findAll();
 
-        List<OrderOutputDto> orderOutputDtos = orders
-                                               .stream()
-                                               .map(OrderMapper::toDto)
-                                               .toList();
-        for(OrderOutputDto orderOutputDto : orderOutputDtos) {
-            addEmployeeAndCustomerName(orderOutputDto);
-        }
-
-        return orderOutputDtos;
+        return orders
+                .stream()
+                .map(OrderMapper::toDto)
+                .map(this::addEmployeeAndCustomerName)
+                .toList();
     }
 
     public OrderOutputDto getOrderById(Long id) {
@@ -64,10 +60,10 @@ public class OrderService {
         Employee employee = this.employeeRepos.findById(orderInputDto.employeeNum)
                 .orElseThrow(()->new ResourceNotFoundException("Employee not found"));
 
-        Customer customer = this.customerRepos.findById(orderInputDto.employeeNum)
+        Customer customer = this.customerRepos.findById(orderInputDto.customerNum)
                 .orElseThrow(()->new ResourceNotFoundException("Customer not found"));
 
-        Order order = OrderMapper.toEntity(orderInputDto);
+        Order order = OrderMapper.toEntity();
         //het vullen van employeeNum wordt hier gedaan en niet in de ordermapper
         //het vullen van customerNum wordt hier gedaan en niet in de ordermapper
         order.setEmployee(employee);
@@ -206,6 +202,23 @@ public class OrderService {
                                                                + order.getId())
                 );
         this.detailRepos.delete(orderDetailToDelete);
+    }
+
+    public List<OrderOutputDto>getOrdersAuthCustomer(Profile profile){
+
+        Customer existingCustomer = this.customerRepos.findByNameAndLastname(profile.getName(), profile.getLastname())
+                .orElseThrow(()->new ResourceNotFoundException("No customer record found for user:" + profile.getUsername()));
+
+        existingCustomer.setProfile(profile);
+        this.customerRepos.save(existingCustomer);
+
+        List<Order> orders = this.orderRepos.findAllByCustomer(existingCustomer);
+
+        return orders
+                .stream()
+                .map(OrderMapper::toDto)
+                .map(this::addEmployeeAndCustomerName)
+                .toList();
     }
 
     //helper functie voor berekening totale bedrag van de order
