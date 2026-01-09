@@ -52,6 +52,11 @@ public class Order {
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
 
+    public Order(Customer customer, Employee employee) {
+        this.customer = customer;
+        this.employee = employee;
+    }
+
 }
 
 

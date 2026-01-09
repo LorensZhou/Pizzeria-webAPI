@@ -26,4 +26,9 @@ public class Employee {
     @Column(length=128)
     private String lastname;
 
+    public Employee(String name, String lastname) {
+        this.name = name;
+        this.lastname = lastname;
+    }
+
 }
