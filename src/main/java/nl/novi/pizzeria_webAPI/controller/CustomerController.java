@@ -27,17 +27,17 @@ public class CustomerController {
         return new ResponseEntity<>(customerOutDto, HttpStatus.CREATED);
     }
 
+    @GetMapping("")
+    public ResponseEntity<List<CustomerOutputDto>>getAllCustomers(){
+        return ResponseEntity.ok(this.service.getAllCustomers());
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<CustomerOutputDto>replaceCustomer(@PathVariable int id,
                                                             @Valid @RequestBody CustomerInputDto customerInDto ){
 
         CustomerOutputDto customerOutDto = this.service.replaceCustomer(id, customerInDto);
         return ResponseEntity.ok(customerOutDto);
-    }
-
-    @GetMapping("")
-    public ResponseEntity<List<CustomerOutputDto>>getAllCustomers(){
-        return ResponseEntity.ok(this.service.getAllCustomers());
     }
 
     @DeleteMapping("/{id}")

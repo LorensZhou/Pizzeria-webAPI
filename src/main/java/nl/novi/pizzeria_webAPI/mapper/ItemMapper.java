@@ -8,6 +8,9 @@ public class ItemMapper {
 
     public static Item toEntity(ItemInputDto itemInputDto){
         Item item = new Item();
+        if(itemInputDto.id != null){
+            item.setId(itemInputDto.id);
+        }
         item.setName(itemInputDto.name);
         item.setPrice(itemInputDto.price);
 

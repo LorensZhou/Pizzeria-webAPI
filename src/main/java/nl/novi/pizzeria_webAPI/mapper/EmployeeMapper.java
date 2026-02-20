@@ -8,6 +8,9 @@ public class EmployeeMapper {
 
     public static Employee toEntity(EmployeeInputDto employeeInputDto) {
         Employee employee = new Employee();
+        if(employeeInputDto.id != null){
+            employee.setId(employeeInputDto.id);
+        }
         employee.setName(employeeInputDto.name);
         employee.setLastname(employeeInputDto.lastname);
 

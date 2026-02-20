@@ -15,7 +15,13 @@ public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @Column(length=128)
+
+    @Column(length = 128, unique = true)
     private String name;
     private double price;
+
+    public Item(String name, double price) {
+        this.name = name;
+        this.price = price;
+    }
 }

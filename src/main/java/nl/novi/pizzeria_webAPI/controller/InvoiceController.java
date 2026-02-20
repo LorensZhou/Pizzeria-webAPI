@@ -27,22 +27,21 @@ public class InvoiceController {
         return new ResponseEntity<>(invoiceOutDto, HttpStatus.CREATED);
     }
 
+    @GetMapping("")
+    public ResponseEntity<List<InvoiceOutputDto>>getAllInvoices(){
+        return ResponseEntity.ok(this.service.getAllInvoices());
+    }
+
     @PatchMapping("/{id}")
     public ResponseEntity<InvoiceOutputDto>updateInvoiceAmount(@PathVariable long id, @RequestParam double newInvoiceAmount){
         InvoiceOutputDto invoiceOutDto = this.service.updateInvoiceAmount(id, newInvoiceAmount);
         return ResponseEntity.ok(invoiceOutDto);
     }
 
-    @PatchMapping("{id}/printInvoice")
+    @GetMapping("/{id}/printInvoice")
     public ResponseEntity<InvoiceOutputDto>printInvoice(@PathVariable long id){
         InvoiceOutputDto invoiceOutDto = this.service.printInvoice(id);
         return ResponseEntity.ok(invoiceOutDto);
-    }
-
-
-    @GetMapping("")
-    public ResponseEntity<List<InvoiceOutputDto>>getAllInvoices(){
-        return ResponseEntity.ok(this.service.getAllInvoices());
     }
 
     @DeleteMapping("/{id}")

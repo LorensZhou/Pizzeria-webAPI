@@ -16,8 +16,6 @@ import java.util.Set;
 @RestController
 public class UserController {
 
-    // No UserService used in demo code!
-
     private final UserRepository userRepos;
     private final RoleRepository roleRepos;
     private final PasswordEncoder encoder;

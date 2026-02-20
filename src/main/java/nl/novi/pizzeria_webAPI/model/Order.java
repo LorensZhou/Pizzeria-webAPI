@@ -18,7 +18,7 @@ public class Order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long Id;
+    private long id;
 
     @Column(length=252)
     private String orderReference;
@@ -51,6 +51,11 @@ public class Order {
     private PaymentStatus paymentStatus;
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
+
+    public Order(Customer customer, Employee employee) {
+        this.customer = customer;
+        this.employee = employee;
+    }
 
 }
 
