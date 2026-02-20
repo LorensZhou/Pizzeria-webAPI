@@ -24,7 +24,7 @@ public class ProfileController {
         this.userRepos = userRepository;
     }
 
-    @PostMapping
+    @PostMapping("")
     public ResponseEntity<Profile> createProfile(@RequestBody ProfileDto profileDto) {
 
         if (!userRepos.existsById(profileDto.username)) {

@@ -27,15 +27,15 @@ public class EmployeeController {
         return new ResponseEntity<>(employeeOutDto, HttpStatus.CREATED);
     }
 
+    @GetMapping("")
+    public ResponseEntity<List<EmployeeOutputDto>>getAllEmployees(){
+        return ResponseEntity.ok(this.service.getAllEmployees());
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<EmployeeOutputDto>replaceEmployee(@PathVariable int id, @Valid @RequestBody EmployeeInputDto employeeInputDto){
         EmployeeOutputDto employeeOutDto = this.service.replaceEmployee(id, employeeInputDto);
         return ResponseEntity.ok(employeeOutDto);
-    }
-
-    @GetMapping("")
-    public ResponseEntity<List<EmployeeOutputDto>>getAllEmployees(){
-        return ResponseEntity.ok(this.service.getAllEmployees());
     }
 
     @DeleteMapping("/{id}")

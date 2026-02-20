@@ -1,5 +1,6 @@
 package nl.novi.pizzeria_webAPI.service;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -13,7 +14,9 @@ import java.nio.file.StandardCopyOption;
 
 @Service
 public class FileStorageService {
-    private static final String STORAGE_DIRECTORY = "/Users/storage";
+    //  "/Users/storage"
+    @Value("${STORAGE_PATH}")
+    private String storageDirectory;
 
     public void saveFile(MultipartFile fileToSave) throws IOException {
         if (fileToSave == null) {
@@ -21,7 +24,7 @@ public class FileStorageService {
         }
 
         // Create the directory if it doesn't exist
-        Path storagePath = Paths.get(STORAGE_DIRECTORY);
+        Path storagePath = Paths.get(storageDirectory);
         if (!Files.exists(storagePath)) {
             Files.createDirectories(storagePath);
         }
@@ -40,10 +43,10 @@ public class FileStorageService {
         if(fileName == null) {
             throw new FileNotFoundException("fileName cannot be empty");
         }
-        File fileToDownload = new File(STORAGE_DIRECTORY + File.separator + fileName);
+        File fileToDownload = new File(storageDirectory + File.separator + fileName);
 
         //Security check
-        if(!fileToDownload.getAbsolutePath().startsWith(STORAGE_DIRECTORY)){
+        if(!fileToDownload.getAbsolutePath().startsWith(storageDirectory)){
             throw new SecurityException("Access denied: Invalid file path");
         }
 
