@@ -241,15 +241,15 @@ Vervolgens krijg je een venster om de pad te selecteren waar je de gedownload fi
 
 Ik wil hier het testen van deze endpoint uitwerken. Want deze endpoint is wat ingewikkelder om te testen. Hier zijn de stappen dat je moet doorlopen om deze endpoint goed te kunnen testen.  
 
-1. Je kan de bestaande gebruikers gebruiken om in te loggen voor authenticatie. Log in als een bestaande CUSTOMER. Je haalt de jwt token op en die vul je in environment variabele bijvoorbeeld {{wachtwoord}}. Zie hoofdstuk 7. 
+1. Je kan de bestaande gebruikers gebruiken om in te loggen voor authenticatie. Log in als een bestaande CUSTOMER. Je haalt de jwt token op en die vul je in environment variabele bijvoorbeeld {{wachtwoord1}} met customer role, voor credenials van een customer. Zie hoofdstuk 7. 
 
-2. Het is vereist dat je eerst een Profile aanmaakt voor username (parameter) bijv. “lorens”, met de juiste name en lastname die correspondeert met een bestaande customer bijv. name: “Lorens” en lastname : “Zhou” in de body. 
+2. Het is vereist dat je eerst een Profile aanmaakt voor username (parameter) bijv. “lorens”, met de juiste name en lastname die correspondeert met een bestaande customer bijv. name: “Lorens” en lastname : “Zhou” in de body. De username "lorens" het komt dan als username voor in de user met een customer role en is tevens de username voor de Profile. Deze twee usernames moeten gelijk zijn. Dus: Profile.username = User.username (met customer role), Profile.name = Customer.name en Profile.lastname = Customer.lastname. Er is een link tussen Profile en User. Er is een link tussen Profile en Customer.
 
-3. Daarna ga je naar authentication en typ je {{wachtwoord}} in bij de Token om de jwt-token op te halen. Dan druk je op “send” bij endpoint (profiles) om een profiel aan te maken. 
+3. Daarna ga je naar authentication en typ je {{wachtwoord1}} in bij de Token om de jwt-token op te halen. Dan druk je op “send” bij endpoint (profiles) om een profiel aan te maken. 
 
-4. Vervolgens haal je de token op voor ADMIN role en deze bewaar je als environment variabele {{wachtwoord1}}. Je gaat naar POST localhost:8080/orders en maakt twee orders aan met customerNum die correspondeert met name: “Lorens” en lastname: “Zhou”. Bij “Authentication” moet je in het veld van de token {{wachtwoord1}} intypen, want alleen ADMIN kan een order aanmaken en niet een CUSTOMER. 
+4. Vervolgens haal je de token op voor ADMIN role en deze bewaar je als environment variabele {{wachtwoord1}}. Je gaat naar POST localhost:8080/orders en maakt twee orders aan met customerNum die correspondeert met name: “Lorens” en lastname: “Zhou”. Bij “Authentication” moet je in het veld van de token {{wachtwoord}} intypen, want alleen ADMIN kan een order aanmaken en niet een CUSTOMER {{wachtwoord1}}. 
 
-5. Dan ga je naar GET localhost:8080/orders/auth-customer/lorens. “lorens” dat is de username die je moet opgeven als parameter. Bij Authentication tabblad vul je in {{wachtwoord}} voor de jwt-token van de CUSTOMER. Vervolgens druk je op knop send. De twee orders worden dan opgehaald die zijn aangemaakt via ADMIN role. Bij deze test heb je CUSTOMER role en ADMIN rol nodig om deze endpoint te testen.
+5. Dan ga je naar GET localhost:8080/orders/auth-customer/lorens. “lorens” dat is de username die je moet opgeven als pathvariabele. Bij Authentication tabblad vul je in {{wachtwoord}} voor de jwt-token van de CUSTOMER. Vervolgens druk je op knop send. De twee orders worden dan opgehaald die zijn aangemaakt via ADMIN role. Bij deze test heb je CUSTOMER role en ADMIN rol nodig om deze endpoint te testen.
 <br><br>
 
 ## 9. Tabel met alle endpoints en toelichting
