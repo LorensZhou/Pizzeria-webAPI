@@ -53,7 +53,7 @@ Stap 2
 
 Geef de database de naam “pizzeria-db” en de owner “postgres” en klik op “save”. 
 
-<img src="src/assets/Screenshot -DB-conf-stap2.png" width="650" alt="db configuration screenshot 2">
+<img src="src/assets/Screenshot -DB-conf-stap2.png" width="700" alt="db configuration screenshot 2">
 
 Stap 3 
 
@@ -69,7 +69,7 @@ spring.datasource.password="eigen ingestelde password”
 
 spring.datasource.driver-class-name=org.postgresql.Driver 
 
-<img src="src/assets/Screenshot -DB-conf-stap3.png" width="650" alt="db configuration screenshot 3">
+<img src="src/assets/Screenshot -DB-conf-stap3.png" width="700" alt="db configuration screenshot 3">
 
 De eigen ingestelde password van spring.datasource.password is hetzelfde password die je hebt opgegeven bij het installeren van PostgreSQL. Deze is wel belangrijk als je toegang wilt hebben tot de database.  
 
@@ -83,31 +83,31 @@ Stap 1
 
 Open het project pizzeria-webAPI in IntelliJJ. In FileStorageService.java hebben wij de waarde van de filepath genoemd als environment variabele : ${STORAGE_PATH}.  
 
-<img src="src/assets/Screenshot -Pad-instellen-stap1.png" width="650" alt="pad instellen screenshot 1">
+<img src="src/assets/Screenshot -Pad-instellen-stap1.png" width="700" alt="pad instellen screenshot 1">
 
 Stap 2 
 
 Deze moeten wij ook een waarde geven in IntelliJ voor een environment variabel. Om dit in te stellen ga je naar “edit configuration” onder “PizzeriaWebApiApplication”. 
 
-<img src="src/assets/Screenshot -pad-instellen-stap2.png" width="650" alt="pad instellen screenshot 2">
+<img src="src/assets/Screenshot -pad-instellen-stap2.png" width="700" alt="pad instellen screenshot 2">
 
 Stap 3 
 
 Dan klik je op “Modify options”. 
 
-<img src="src/assets/Screenshot -pad-instellen-stap3.png" width="650" alt="pad instellen screenshot 3">
+<img src="src/assets/Screenshot -pad-instellen-stap3.png" width="700" alt="pad instellen screenshot 3">
 
 Stap 4 
 
 Dan vink je “environment variables” aan. En je komt dan in het edit veld van de environment variabelen. 
 
-<img src="src/assets/Screenshot -pad-instellen-stap4.png" width="650" alt="pad instellen screenshot 4">
+<img src="src/assets/Screenshot -pad-instellen-stap4.png" width="700" alt="pad instellen screenshot 4">
 
 Stap 5 
 
 Daar geef je de waarden van de environment variabelen op. Vervolgens druk je op “ok” om de aanpassing door te voeren.  
 
-<img src="src/assets/Screenshot -pad-instellen-stap5.png" width="650" alt="pad instellen screenshot 5">
+<img src="src/assets/Screenshot -pad-instellen-stap5.png" width="700" alt="pad instellen screenshot 5">
 
 In mijn voorbeeld heb ik de environment variabele STORAGE_PATH ingesteld op /Users/storage. De folder storage heb ik zelf aangemaakt in Finder van mijn Macbook onder het mapje Users. Deze waarde kun je kopiëren door op de folder te gaan staan in de Finder onderaan en op rechtermuisknop te drukken. Dan selecteer je “Copy “storage” as Pathname”. Als je command-v doet, dan zul je de waarde “/Users/storage” krijgen. Deze vul je dan in bij de environment variabele als een waarde voor ”STORAGE_PATH”. Deze pad heb je nodig als je een bestand wilt uploaden of downloaden via PizzeriaWebApiApplication. 
 <br><br>
@@ -161,7 +161,7 @@ Stap1
 
 Maak eerst een nieuwe gebruiker aan door gebruik te maken van de aangeleverde postman collectie “Collectie Post Requests”. Kies daarin de endpoint-request auth>POST users. In de JSON body kun je invullen bijvoorbeeld zie hieronder. 
 
-<img src="src/assets/Screenshot -auth-stap1.png" width="650" alt="authenticatie screenshot 1">
+<img src="src/assets/Screenshot -auth-stap1.png" width="700" alt="authenticatie screenshot 1">
 
 Als je op “send” drukt krijgt je een 201 created. Dan is een nieuwe user aangemaakt. Let op dat je altijd “roles” attribuut moet invullen. De keuzes zijn: ADMIN, EMPLOYEE of CUSTOMER. In de database zijn er al een user aangemaakt voor een ADMIN, EMPLOYEE en CUSTOMER. Die gebruikers kun je ook gebruiken dan hoef je deze stap niet te doen. Zie hoofdstuk 4 voor de inloggegevens. 
 
@@ -169,7 +169,7 @@ Stap 2
 
 Ga vervolgens naar de postman collectie localhost:8080/auth>POST auth. Vul dan in de body de credentials van de gebruiker in om in te loggen. Je kan ook de inloggegevens van hoofdstuk 4 gebruiken voor een bestaande gebruiker, bijvoorbeeld {“username”: “lorens1”, “password”:”lorens1”} voor een ADMIN gebruiker.  
 
-<img src="src/assets/Screenshot -auth-stap2.png" width="650" alt="authenticatie screenshot 2">
+<img src="src/assets/Screenshot -auth-stap2.png" width="700" alt="authenticatie screenshot 2">
 
 Daarna druk je op de send-knop. Vervolgens krijg je een 200 ok melding terug. Onderste scherm zie je aan de linkerkant boven “body” tabblad staan. Als je daarop klikt, kun je ook een tabblad “headers” selecteren. Als je daarop klikt kom je in de headers section terecht. Rechts van de key Authorization zie je Bearer. ........ staan met string van letters en getallen staan. Dat is de bearer token of JWT token. Als je de string selecteert zonder het woord bearer, dan heb je de token. Deze kopieer je met command-c.  
 
@@ -177,11 +177,11 @@ Stap 3
 
 Rechtsboven de postman scherm zie je no environment tabblad staan. Daar klik je erop om een environment variabele te maken waarin je de token kan opslaan. Rechts van de tabblad van no environment staat een plus-teken. Als je daarop klikt, kun je een nieuwe environment variabele aanmaken.
 
-<img src="src/assets/Screenshot -auth-stap3.png" width="650" alt="authenticatie screenshot 3.0">
+<img src="src/assets/Screenshot -auth-stap3.png" width="700" alt="authenticatie screenshot 3.0">
 
 Je geeft een de environment een naam bijvoorbeeld “collectie wachtwoord”.  
 
-<img src="src/assets/Screenshot -auth-stap3-2.png" width="650" alt="authenticatie screenshot 3.2">
+<img src="src/assets/Screenshot -auth-stap3-2.png" width="700" alt="authenticatie screenshot 3.2">
 
 Daarna geef je de naam van de variabele op bijvoorbeeld: “wachtwoord”. En achter die veld onder de label “value” plak je de jwt token. Hierdoor wordt de jwt token opgeslagen in de variabele “wachtwoord”. 
 
@@ -189,7 +189,7 @@ Stap 4
 
 Ga naar een endpoint die beveiligd is met jwt token bijvoorbeeld end point voor getAllCustomers, GET localhost:8080/customers. Je gaat naar de tabblad Auth in postman. Je selecteert bij AuthType “Bearer Token”. Rechts van Token in het invulveld vul je in “{{wachtwoord}}”. Hierdoor wordt de waarde gebruikt van de variabele “wachtwoord” die opgeslagen is in de environment variabele van de environment “wachtwoord collectie”. Hierdoor hoef je niet steeds de jwt token te copy pasten als je een endpoint wilt benaderen met autorisatie beveiliging. 
 
-<img src="src/assets/Screenshot -auth-stap4.png" width="650" alt="authenticatie screenshot 4">
+<img src="src/assets/Screenshot -auth-stap4.png" width="700" alt="authenticatie screenshot 4">
 <br><br>
 
 ## 7. File upload en download gerbuiksaanwijzing
@@ -204,13 +204,13 @@ Stap 1
 
 Eerst moet je inloggen met de credentials, omdat de endpoint beveiligd is met autorisatie. Daarvoor heb je dus jwt token nodig. Als het goed is heb je de jwt token al opgeslagen in een environment variabele in hoofdstuk 6 “wachtwoord”. Ga naar de collectie postman filemanager>POST localhost:8080/upload-file. En ga naar tabblad “ Body”. Typ in onder het Key veld “file” voor de type body. In het scherm van postman selecteer “file” en niet “text”. Als je op select files klikt, dan klapt een menu open. Daar klik je op “New file from local machine” met het Plus teken. 
 
-<img src="src/assets/Screenshot -upload-stap1.png" width="650" alt="upload screenshot 1">
+<img src="src/assets/Screenshot -upload-stap1.png" width="700" alt="upload screenshot 1">
 
 Stap 2 
 
 Door een bestand te selecteren in het venster wordt de “value” veld gevuld met de bestandsnaam. 
 
-<img src="src/assets/Screenshot -upload-stap2.png" width="650" alt="upload screenshot 2">
+<img src="src/assets/Screenshot -upload-stap2.png" width="700" alt="upload screenshot 2">
 
 Stap 3 
 
@@ -222,32 +222,32 @@ Stap 1
 
 Ga naar de collectie postman filemanager>GET localhost:8080/download file. En ga naar tab-blad Params, type in onder the key de parameternaam “file”. Zie afbeelding.
 
-<img src="src/assets/Screenshot -download-stap1.png" width="650" alt="download screenshot 1">
+<img src="src/assets/Screenshot -download-stap1.png" width="700" alt="download screenshot 1">
 
 Stap 2 
 
 Zoek op de file naam die je wilt downloaden van de pad die je op hebt gegeven in de variabele “STORAGE_DIRECTORY” in ons voorbeeld is de pad “/Users/storage”. Als je die file hebt gevonden kopieer de file naam bijvoorbeeld “pgadmin4-8.14-x86_64.dmg” en plak je onder de “Value” veld.  
 
-<img src="src/assets/Screenshot -download-stap2.png" width="650" alt="download screenshot 2">
+<img src="src/assets/Screenshot -download-stap2.png" width="700" alt="download screenshot 2">
 
 Stap 3 
 
 Deze endpoint is ook beveiligd met autorisatie. Ga naar tabblad Authorization. Selecteer bij Auth Type “Bearer Token” en typ in het veld naast de label Token “{{wachtwoord}}” om de waarde van de jwt token op te halen die is opgeslagen in de environment variabele.  
 
-<img src="src/assets/Screenshot -download-stap3.png" width="650" alt="download screenshot 3">
+<img src="src/assets/Screenshot -download-stap3.png" width="700" alt="download screenshot 3">
 
 Stap 4  
 
 Vervolgens moet je bij endpoint download-file niet op de send-knop drukken, maar op het pijltje rechts van de send-knop. Dan zie je de optie “Send and Download” verschijnen. Daarop moet je klikken om de download te starten. 
 
-<img src="src/assets/Screenshot -download-stap4.png" width="650" alt="download screenshot 4">
+<img src="src/assets/Screenshot -download-stap4.png" width="700" alt="download screenshot 4">
 
 Stap 5  
 
 Vervolgens krijg je een venster om de pad te selecteren waar je de gedownload file wilt gaan opslaan. Als je selectie hebt gedaan, dan is de download klaar. 
 
 
-<img src="src/assets/Screenshot -download-stap5.png" width="650" alt="download screenshot 5">
+<img src="src/assets/Screenshot -download-stap5.png" width="700" alt="download screenshot 5">
 <br><br>
 
 ## 8. Het testen van endpoint: /orders/auth-customer/{username}
