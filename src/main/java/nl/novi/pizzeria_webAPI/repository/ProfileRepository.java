@@ -7,6 +7,7 @@ import java.util.Optional;
 
 public interface ProfileRepository extends JpaRepository<Profile, String> {
     boolean existsByNameAndLastname(String name, String lastname);
+    boolean existsByUsername(String username);
     Optional<Profile>findByNameAndLastname(String name, String lastname);
 
 }

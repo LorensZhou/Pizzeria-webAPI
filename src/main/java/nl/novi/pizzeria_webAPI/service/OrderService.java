@@ -5,6 +5,8 @@ import jakarta.transaction.Transactional;
 import nl.novi.pizzeria_webAPI.dto.DetailInputDto;
 import nl.novi.pizzeria_webAPI.dto.OrderInputDto;
 import nl.novi.pizzeria_webAPI.dto.OrderOutputDto;
+import nl.novi.pizzeria_webAPI.exception.InvalidActionException;
+import nl.novi.pizzeria_webAPI.exception.ItemAlreadyExistsException;
 import nl.novi.pizzeria_webAPI.exception.ResourceNotFoundException;
 import nl.novi.pizzeria_webAPI.mapper.OrderMapper;
 import nl.novi.pizzeria_webAPI.model.*;
@@ -107,6 +109,13 @@ public class OrderService {
         Order existingOrder = this.orderRepos.findById(id).orElseThrow(()-> new ResourceNotFoundException("Order not found"));
         Item newItem = this.itemRepos.findById(newItemId).orElseThrow(()-> new ResourceNotFoundException("Item not found"));
 
+        //checken of newItem al aanwezig is in de orderdetail van de order
+        boolean itemExistsInOrder = this.detailRepos.findByOrderAndItem(existingOrder, newItem).isPresent();
+
+        if(itemExistsInOrder){
+            throw new ItemAlreadyExistsException("Item with id: " + newItemId + " already exists in order " + id + ". Use update quantity instead." );
+        }
+
         //maak een nieuwe OrderDetail aan
         OrderDetail newOrderDetail = new OrderDetail();
         newOrderDetail.setItem(newItem);
@@ -175,7 +184,7 @@ public class OrderService {
                     existingOrder.setPaymentStatus(PaymentStatus.PAID);
                 }
                 break;
-            default: throw new IllegalArgumentException("This action (" + action + ") is not valid");
+            default: throw new InvalidActionException("This action (" + action + ") is not valid");
         }
 
         Order updatedOrder = this.orderRepos.save(existingOrder);

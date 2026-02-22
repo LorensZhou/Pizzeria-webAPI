@@ -4,6 +4,7 @@ import nl.novi.pizzeria_webAPI.dto.EmployeeInputDto;
 import nl.novi.pizzeria_webAPI.dto.EmployeeOutputDto;
 import nl.novi.pizzeria_webAPI.exception.InvalidDeletionException;
 import nl.novi.pizzeria_webAPI.exception.InvalidReplaceException;
+import nl.novi.pizzeria_webAPI.exception.RecordAlreadyExistsException;
 import nl.novi.pizzeria_webAPI.exception.ResourceNotFoundException;
 import nl.novi.pizzeria_webAPI.mapper.EmployeeMapper;
 import nl.novi.pizzeria_webAPI.model.Employee;
@@ -26,6 +27,9 @@ public class EmployeeService {
     }
 
     public EmployeeOutputDto createEmployee(EmployeeInputDto employeeInDto) {
+        if(employeeRepos.existsByNameAndLastname(employeeInDto.name, employeeInDto.lastname)) {
+            throw new RecordAlreadyExistsException("A employee with this name and lastname already exists");
+        }
         Employee employee = EmployeeMapper.toEntity(employeeInDto);
         this.employeeRepos.save(employee);
         return EmployeeMapper.toDto(employee);
@@ -34,6 +38,10 @@ public class EmployeeService {
     public EmployeeOutputDto replaceEmployee(int id, EmployeeInputDto employeeInDto) {
         Employee existingEmployee = this.employeeRepos.findById(id)
                 .orElseThrow(()->new ResourceNotFoundException("Employee with id " + id + " not found"));
+
+        if(employeeRepos.existsByNameAndLastname(employeeInDto.name, employeeInDto.lastname)) {
+            throw new RecordAlreadyExistsException("A employee with this name and lastname already exists");
+        }
 
         if(this.orderRepos.existsByEmployee(existingEmployee)){
             throw new InvalidReplaceException("Employee with id "

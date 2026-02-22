@@ -3,6 +3,7 @@ package nl.novi.pizzeria_webAPI.controller;
 import nl.novi.pizzeria_webAPI.dto.ProfileDto;
 import nl.novi.pizzeria_webAPI.exception.RecordAlreadyExistsException;
 import nl.novi.pizzeria_webAPI.exception.ResourceNotFoundException;
+import nl.novi.pizzeria_webAPI.exception.UsernAlreadyExistsException;
 import nl.novi.pizzeria_webAPI.model.Profile;
 import nl.novi.pizzeria_webAPI.repository.ProfileRepository;
 import nl.novi.pizzeria_webAPI.repository.UserRepository;
@@ -29,6 +30,10 @@ public class ProfileController {
 
         if (!userRepos.existsById(profileDto.username)) {
             throw new ResourceNotFoundException("The user does not exist with username: " + profileDto.username);
+        }
+
+        if (profileRepos.existsByUsername(profileDto.username)){
+            throw new UsernAlreadyExistsException("Cannot create user: The username '" + profileDto.username + "' is already taken.");
         }
 
         //check of de combinatie name en lastname al bestaat

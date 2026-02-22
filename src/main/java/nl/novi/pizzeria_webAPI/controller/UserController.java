@@ -1,6 +1,7 @@
 package nl.novi.pizzeria_webAPI.controller;
 
 import nl.novi.pizzeria_webAPI.dto.UserDto;
+import nl.novi.pizzeria_webAPI.exception.UsernAlreadyExistsException;
 import nl.novi.pizzeria_webAPI.model.Role;
 import nl.novi.pizzeria_webAPI.model.User;
 import nl.novi.pizzeria_webAPI.repository.RoleRepository;
@@ -27,6 +28,9 @@ public class UserController {
     }
     @PostMapping("/users")
     public String createUser(@RequestBody UserDto userDto) {
+        if(this.userRepos.existsByUsername(userDto.username)){
+            throw new UsernAlreadyExistsException("Cannot create user: The username '" + userDto.username + "' is already taken.");
+        }
         User newUser = new User();
         newUser.setUsername(userDto.username);
         newUser.setPassword(encoder.encode(userDto.password));

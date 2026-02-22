@@ -25,6 +25,10 @@ public class ItemService {
     }
 
     public ItemOutputDto createItem(ItemInputDto itemInputDto) {
+        if(this.itemRepos.existsByName(itemInputDto.name))
+        {
+            throw new IllegalArgumentException("Cannot create item: The name'" + itemInputDto.name + "' is already taken.");
+        }
         Item item = ItemMapper.toEntity(itemInputDto);
         this.itemRepos.save(item);
         return ItemMapper.toDto(item);

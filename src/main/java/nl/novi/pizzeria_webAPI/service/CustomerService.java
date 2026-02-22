@@ -61,6 +61,10 @@ public class CustomerService {
         Customer existingCustomer = this.customerRepos.findById(id)
                 .orElseThrow(()->new ResourceNotFoundException("Customer with id " + id + " not found"));
 
+        if(customerRepos.existsByNameAndLastname(customerInDto.name, customerInDto.lastname)) {
+            throw new RecordAlreadyExistsException("A customer with this name and lastname already exists");
+        }
+
         if(this.orderRepos.existsByCustomer(existingCustomer)){
             throw new InvalidReplaceException("Customer with id "
                     + id
