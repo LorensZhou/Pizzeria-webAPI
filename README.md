@@ -1,4 +1,4 @@
-# Pizzeria-webAPI - Installatie Handleiding & API-documentatie
+# Pizzeria-webAPI - Installatie Handleiding
 <br>
 
 ## Inhoudsopgave
@@ -6,12 +6,7 @@
 1. Inleiding
 2. Handleiding
 3. Benodigdheden
-4. Gebruikersrollen en gegevens
-5. Lijst van endpoints
-6. Authenticatie en autorisatie
-7. File upload en download gerbuiksaanwijzing
-8. Het testen van endpoint: /orders/auth-customer/{username}
-9. Tabel met alle endpoints en toelichting
+4. Tabel met alle endpoints en toelichting
 
 <br>
 
@@ -24,11 +19,9 @@ De applicatie heeft de meeste standaard functionaliteiten zoals inloggen, order 
 
 ## 2. Handleiding
 
-Dit document bevat uitleg over de Pizzaria-WebApi en het gebruik van de endpoints. Om de applicatie (API) te gebruiken moet je toegang hebben via de endpoints van de applicatie. Er wordt in de handleiding uitleg gegeven hoe je project kan opstarten d.m.v. installaties van de programma’s. De vereiste programma’s zijn IntelliJ, JDK 17, Postman en Postgresql. Er moet ook bepaalde dependencies worden geïnstalleerd in IntelliJ om de applicatie te kunnen runnen. 
+Dit document bevat uitleg over de installatie van Pizzaria-WebApi. Om de applicatie (API) te gebruiken moet je toegang hebben via de endpoints van de applicatie (in hoofdstuk 4 zijn alle endpoints weergegeven). Voor een uitgebreid uitgelegd van het gebruik van endpoints verwijs ik naar de API-documentatie. Er wordt in deze handleiding uitleg gegeven hoe je project kan opstarten d.m.v. installaties van de programma’s. De vereiste programma’s zijn IntelliJ, JDK 17, Postman en Postgresql. Er moet ook bepaalde dependencies worden geïnstalleerd in IntelliJ om de applicatie te kunnen runnen. 
 
-Daarnaast wordt er ook uitleg gegeven hoe je de authenticatie kan toepassen voor de endpoints van de gebruikers: EMPLOYEE, CUSTOMER en ADMIN. De wachtwoorden en inlog zijn al gereed in Postman-requests. Het is belangrijk om de hoofstukken: benodigdheden, PostGreSQL configuratie en lijst REST endpoints te lezen om de applicatie te kunnen gebruiken. 
-
-De endpoints staan in het overzicht van hoofdstuk 10 in tabellen opgesomd. De installatie wordt stap voor stap uitgelegd. De installatie is geschreven voor en uitgevoerd op het besturingssysteem van MacOs. Er kunnen andere programma’s worden gebruikt, maar het wordt niet besproken in deze handleiding.
+De installatie wordt stap voor stap uitgelegd. De installatie is geschreven voor en uitgevoerd op het besturingssysteem van MacOs. Er kunnen andere programma’s worden gebruikt, maar het wordt niet besproken in deze handleiding.
 <br><br>
 
 ## 3. Benodigdheden
@@ -112,160 +105,9 @@ Daar geef je de waarden van de environment variabelen op. Vervolgens druk je op 
 In mijn voorbeeld heb ik de environment variabele STORAGE_PATH ingesteld op /Users/storage. De folder storage heb ik zelf aangemaakt in Finder van mijn Macbook onder het mapje Users. Deze waarde kun je kopiëren door op de folder te gaan staan in de Finder onderaan en op rechtermuisknop te drukken. Dan selecteer je “Copy “storage” as Pathname”. Als je command-v doet, dan zul je de waarde “/Users/storage” krijgen. Deze vul je dan in bij de environment variabele als een waarde voor ”STORAGE_PATH”. Deze pad heb je nodig als je een bestand wilt uploaden of downloaden via PizzeriaWebApiApplication. 
 <br><br>
 
-## 4. Gebruikersrollen en gegevens
+## 4. Tabel met alle endpoints en toelichting
 
-In de inleiding hebben wij over de verschillende gebruikers van de applicatie namelijk employee, customer en admin. Employee zijn de medewerkers van het pizzeria restaurant, customer zijn de klanten die een bestelling willen plaatsen en admin is een manager van het restaurant die meeste bevoegdheden heeft om toegang te krijgen tot alle functionaliteiten van de applicatie.  
-Zie hieronder de tabel. 
-
-|Rol | Toelichting|
-|----|------------|
-|ROLE_EMPLOYEE|De medewerker heeft toegang tot de meeste functionaliteiten van de applicatie, zoals orders aanmaken en orders aanpassen. Daarnaast kan zij/hij factuur aanmaken en uitprinten. Andere bevoegdheden zijn beheren van klantgegevens en items (gerechten).|
-|ROLE_CUSTOMER|De klant heeft zeer beperkte toegang tot de endpoint. Zij kunnen alleen hun eigen orders bekijken en niet aanpassen of verwijderen. Verder kan zij/hij de items alleen bekijken die aanwezig zijn in het systeem.|
-|ROLE_ADMIN|De manager (hier admin) heeft de meeste bevoegdheden. Met zijn/haar inloggegevens kan zij/hij toegang hebben tot alle endpoints.|
-
-### Inloggegevens  
-
-Om toegang te hebben tot de endpoints hebben de gebruikers meestal inloggegevens nodig om in te loggen. De inloggegevens zijn voor de gebruikers: 
-
-|Gebruikersnaam | Wachtwoord | Rol|
-|---------------|------------|----|
-|lorens | lorens | CUSTOMER |
-|lorens1 | lorens1 | ADMIN |
-|lorens2 | lorens2 | EMPLOYEE |
-
-Deze gebruikers zijn al beschikbaar in de database met desbetreffende wachtwoord. Je kan zij gewoon gebruiken. Het is dan niet nodig om een nieuwe gebruiker aan te maken. Om de endpoint voor het aanmaken een nieuwe gebruiker te testen, kun je gewoon een nieuwe gebruiker aanmaken. 
-<br><br>
-
-## 5. Lijst van endpoints
-
-Hier bespreek ik de endpoints die ik heb gemaakt voor de applicatie. De mapping van de endpoint wordt weergegeven en hoe de endpoints API request moet worden opgesteld.  
-
-In de tabellen wordt er per controller de informatie weergegeven: 
-
-1. Soort API request 
-
-2. De mapping (URI) 
-
-3. Toelichting van de endpoint 
-
-In de collectie van Postman-request vind je ingevulde requests in mappen om direct gebruik te maken van de endpoints onder “pizzeria-webapi”. In de ingevulde requests zijn ook de body ingevuld die je kan gebruiken. Dus je hoeft zelf niet de body’s in json te verzinnen zelf. Als je de requests uitvoert, dan weet je al welke attributen je kan gebruiken om de endpoints te benaderen.  
-<br><br>
-
-## 6. Authenticatie en autorisatie
-
-### Jwt token in postman verkrijgen 
-
-Hieronder wordt er een stappenplan weergegeven voor het verkrijgen van de JWT token in Postman. Zodat je deze token kan gebruiken als een variabele in verschillende requests die een authenticatie vereisen.  
-
-Stap1 
-
-Maak eerst een nieuwe gebruiker aan door gebruik te maken van de aangeleverde postman collectie “Collectie Post Requests”. Kies daarin de endpoint-request auth>POST users. In de JSON body kun je invullen bijvoorbeeld zie hieronder. 
-
-<img src="src/assets/Screenshot -auth-stap1.png" width="700" alt="authenticatie screenshot 1">
-
-Als je op “send” drukt krijgt je een 201 created. Dan is een nieuwe user aangemaakt. Let op dat je altijd “roles” attribuut moet invullen. De keuzes zijn: ADMIN, EMPLOYEE of CUSTOMER. In de database zijn er al een user aangemaakt voor een ADMIN, EMPLOYEE en CUSTOMER. Die gebruikers kun je ook gebruiken dan hoef je deze stap niet te doen. Zie hoofdstuk 4 voor de inloggegevens. 
-
-Stap 2 
-
-Ga vervolgens naar de postman collectie localhost:8080/auth>POST auth. Vul dan in de body de credentials van de gebruiker in om in te loggen. Je kan ook de inloggegevens van hoofdstuk 4 gebruiken voor een bestaande gebruiker, bijvoorbeeld {“username”: “lorens1”, “password”:”lorens1”} voor een ADMIN gebruiker.  
-
-<img src="src/assets/Screenshot -auth-stap2.png" width="700" alt="authenticatie screenshot 2">
-
-Daarna druk je op de send-knop. Vervolgens krijg je een 200 ok melding terug. Onderste scherm zie je aan de linkerkant boven “body” tabblad staan. Als je daarop klikt, kun je ook een tabblad “headers” selecteren. Als je daarop klikt kom je in de headers section terecht. Rechts van de key Authorization zie je Bearer. ........ staan met string van letters en getallen staan. Dat is de bearer token of JWT token. Als je de string selecteert zonder het woord bearer, dan heb je de token. Deze kopieer je met command-c.  
-
-Stap 3 
-
-Rechtsboven de postman scherm zie je no environment tabblad staan. Daar klik je erop om een environment variabele te maken waarin je de token kan opslaan. Rechts van de tabblad van no environment staat een plus-teken. Als je daarop klikt, kun je een nieuwe environment variabele aanmaken.
-
-<img src="src/assets/Screenshot -auth-stap3.png" width="700" alt="authenticatie screenshot 3.0">
-
-Je geeft een de environment een naam bijvoorbeeld “collectie wachtwoord”.  
-
-<img src="src/assets/Screenshot -auth-stap3-2.png" width="700" alt="authenticatie screenshot 3.2">
-
-Daarna geef je de naam van de variabele op bijvoorbeeld: “wachtwoord”. En achter die veld onder de label “value” plak je de jwt token. Hierdoor wordt de jwt token opgeslagen in de variabele “wachtwoord”. 
-
-Stap 4 
-
-Ga naar een endpoint die beveiligd is met jwt token bijvoorbeeld end point voor getAllCustomers, GET localhost:8080/customers. Je gaat naar de tabblad Auth in postman. Je selecteert bij AuthType “Bearer Token”. Rechts van Token in het invulveld vul je in “{{wachtwoord}}”. Hierdoor wordt de waarde gebruikt van de variabele “wachtwoord” die opgeslagen is in de environment variabele van de environment “wachtwoord collectie”. Hierdoor hoef je niet steeds de jwt token te copy pasten als je een endpoint wilt benaderen met autorisatie beveiliging. 
-
-<img src="src/assets/Screenshot -auth-stap4.png" width="700" alt="authenticatie screenshot 4">
-<br><br>
-
-## 7. File upload en download gerbuiksaanwijzing
-
-In de eindopdracht wordt er gesteld dat er ook een functionaliteit moet komen voor het uploaden en downloaden van bestanden via de fileserver. Hier wordt er een stappenplan gegeven hoe je de functionaliteit kan gebruiken. Nb.: de upload en download file is een maximum ingesteld van een bestandsgrootte van max. 2gb. 
-
-Voordat je de functionaliteit wilt gebruiken, moet je eerst de juiste pad instellen voor de file storageserver. Deze als het goed is al gedaan in hoofdstuk 3 bij het onderdeel met environment variabele: Pad instellen voor upload en download van files. 
-
-### Uploaden van bestanden 
-
-Stap 1 
-
-Eerst moet je inloggen met de credentials, omdat de endpoint beveiligd is met autorisatie. Daarvoor heb je dus jwt token nodig. Als het goed is heb je de jwt token al opgeslagen in een environment variabele in hoofdstuk 6 “wachtwoord”. Ga naar de collectie postman filemanager>POST localhost:8080/upload-file. En ga naar tabblad “ Body”. Typ in onder het Key veld “file” voor de type body. In het scherm van postman selecteer “file” en niet “text”. Als je op select files klikt, dan klapt een menu open. Daar klik je op “New file from local machine” met het Plus teken. 
-
-<img src="src/assets/Screenshot -upload-stap1.png" width="700" alt="upload screenshot 1">
-
-Stap 2 
-
-Door een bestand te selecteren in het venster wordt de “value” veld gevuld met de bestandsnaam. 
-
-<img src="src/assets/Screenshot -upload-stap2.png" width="700" alt="upload screenshot 2">
-
-Stap 3 
-
-Vervolgens ga je naar de tabblad Authorization en typ je de variabele naam voor de JWT token in rechts van de label Token: “{{wachtwoord}}”. Tenslotte druk je op send om de post-request te initialiseren, zodat de file kan worden geüpload naar een specifieke opgegeven directory. In ons voorbeeld is de directory “/Users/storage”. 
-
-### Downloaden van bestanden 
-
-Stap 1 
-
-Ga naar de collectie postman filemanager>GET localhost:8080/download file. En ga naar tab-blad Params, type in onder the key de parameternaam “file”. Zie afbeelding.
-
-<img src="src/assets/Screenshot -download-stap1.png" width="700" alt="download screenshot 1">
-
-Stap 2 
-
-Zoek op de file naam die je wilt downloaden van de pad die je op hebt gegeven in de variabele “STORAGE_DIRECTORY” in ons voorbeeld is de pad “/Users/storage”. Als je die file hebt gevonden kopieer de file naam bijvoorbeeld “pgadmin4-8.14-x86_64.dmg” en plak je onder de “Value” veld.  
-
-<img src="src/assets/Screenshot -download-stap2.png" width="700" alt="download screenshot 2">
-
-Stap 3 
-
-Deze endpoint is ook beveiligd met autorisatie. Ga naar tabblad Authorization. Selecteer bij Auth Type “Bearer Token” en typ in het veld naast de label Token “{{wachtwoord}}” om de waarde van de jwt token op te halen die is opgeslagen in de environment variabele.  
-
-<img src="src/assets/Screenshot -download-stap3.png" width="700" alt="download screenshot 3">
-
-Stap 4  
-
-Vervolgens moet je bij endpoint download-file niet op de send-knop drukken, maar op het pijltje rechts van de send-knop. Dan zie je de optie “Send and Download” verschijnen. Daarop moet je klikken om de download te starten. 
-
-<img src="src/assets/Screenshot -download-stap4.png" width="700" alt="download screenshot 4">
-
-Stap 5  
-
-Vervolgens krijg je een venster om de pad te selecteren waar je de gedownload file wilt gaan opslaan. Als je selectie hebt gedaan, dan is de download klaar. 
-
-
-<img src="src/assets/Screenshot -download-stap5.png" width="700" alt="download screenshot 5">
-<br><br>
-
-## 8. Het testen van endpoint: /orders/auth-customer/{username}
-
-Ik wil hier het testen van deze endpoint uitwerken. Want deze endpoint is wat ingewikkelder om te testen. Hier zijn de stappen dat je moet doorlopen om deze endpoint goed te kunnen testen.  
-
-1. Je kan de bestaande gebruikers gebruiken om in te loggen voor authenticatie. Log in als een bestaande CUSTOMER. Je haalt de jwt token op en die vul je in environment variabele bijvoorbeeld {{wachtwoord1}} met customer role, voor credenials van een customer. Zie hoofdstuk 7. 
-
-2. Het is vereist dat je eerst een Profile aanmaakt voor username (parameter) bijv. “lorens”, met de juiste name en lastname die correspondeert met een bestaande customer bijv. name: “Lorens” en lastname : “Zhou” in de body. De username "lorens" het komt dan als username voor in de user met een customer role en is tevens de username voor de Profile. Deze twee usernames moeten gelijk zijn. Dus: Profile.username = User.username (met customer role), Profile.name = Customer.name en Profile.lastname = Customer.lastname. Er is een link tussen Profile en User. Er is een link tussen Profile en Customer.
-
-3. Daarna ga je naar authentication en typ je {{wachtwoord1}} in bij de Token om de jwt-token op te halen. Dan druk je op “send” bij endpoint (profiles) om een profiel aan te maken. 
-
-4. Vervolgens haal je de token op voor ADMIN role en deze bewaar je als environment variabele {{wachtwoord1}}. Je gaat naar POST localhost:8080/orders en maakt twee orders aan met customerNum die correspondeert met name: “Lorens” en lastname: “Zhou”. Bij “Authentication” moet je in het veld van de token {{wachtwoord}} intypen, want alleen ADMIN kan een order aanmaken en niet een CUSTOMER {{wachtwoord1}}. 
-
-5. Dan ga je naar GET localhost:8080/orders/auth-customer/lorens. “lorens” dat is de username die je moet opgeven als pathvariabele. Bij Authentication tabblad vul je in {{wachtwoord}} voor de jwt-token van de CUSTOMER. Vervolgens druk je op knop send. De twee orders worden dan opgehaald die zijn aangemaakt via ADMIN role. Bij deze test heb je CUSTOMER role en ADMIN rol nodig om deze endpoint te testen.
-<br><br>
-
-## 9. Tabel met alle endpoints en toelichting
+In dit hoofdstuk worden alle endpoints opgesomd in een tabel met toelichting. Voor een uitgebreide documentatie verwijs ik naar de API-documenatie. Daar staat alles in hoe je de endpoints en beveiligde endpoints kan benaderen.
 
 User Controller 
 |Soort API | Mapping | Toelichting |
