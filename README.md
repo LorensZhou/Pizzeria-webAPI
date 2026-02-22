@@ -47,7 +47,7 @@ Stap 1
 
 Open het project pizzeria-webAPI in IntelliJJ. In FileStorageService.java hebben wij de waarde van de filepath genoemd als environment variabele : ${STORAGE_PATH}.
 
-<img src="src/assets/Screenshot -DB-conf-stap1.png" width="650" alt="db configuration screenshot 1">
+<img src="src/assets/Screenshot -DB-conf-stap1.png" width="750" alt="db configuration screenshot 1">
 
 Stap 2 
 
