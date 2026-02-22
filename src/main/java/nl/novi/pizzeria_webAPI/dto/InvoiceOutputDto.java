@@ -1,7 +1,6 @@
 package nl.novi.pizzeria_webAPI.dto;
 
 import nl.novi.pizzeria_webAPI.model.InvoiceStatus;
-import nl.novi.pizzeria_webAPI.model.OrderDetail;
 import nl.novi.pizzeria_webAPI.model.PaymentStatus;
 
 import java.time.LocalDate;

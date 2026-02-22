@@ -44,7 +44,7 @@ public class ExceptionController{
 
     @ExceptionHandler(RecordAlreadyExistsException.class)
     public ResponseEntity<String>handleRecordsAlreadyExists(RecordAlreadyExistsException ex){
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
 
     @ExceptionHandler(ResourceNotFoundException.class)
@@ -60,6 +60,26 @@ public class ExceptionController{
     @ExceptionHandler(InvalidReplaceException.class)
     public ResponseEntity<String> handleInvalidReplace(InvalidReplaceException ex){
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(ItemAlreadyExistsException.class)
+    public ResponseEntity<String> handleItemAlreadyExists(ItemAlreadyExistsException ex){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(UsernAlreadyExistsException.class)
+    public ResponseEntity<String> handleUsernAlreadyExists(UsernAlreadyExistsException ex){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(InvalidActionException.class)
+    public ResponseEntity<String> handleInvalidAction(InvalidActionException ex){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(value = IllegalArgumentException.class)
+    public ResponseEntity<Object> handleBadRequest(IllegalArgumentException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
 }

@@ -5,7 +5,6 @@ import jakarta.validation.constraints.NotNull;
 import nl.novi.pizzeria_webAPI.model.OrderStatus;
 import nl.novi.pizzeria_webAPI.model.PaymentStatus;
 
-import java.time.LocalDate;
 import java.util.Set;
 
 public class OrderInputDto {
