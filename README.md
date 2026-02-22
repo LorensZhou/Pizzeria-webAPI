@@ -1,4 +1,4 @@
-# Pizzeria-webAPI - Handleiding
+# Pizzeria-webAPI - Installatie Handleiding & API-documentatie
 <br>
 
 ## Inhoudsopgave
