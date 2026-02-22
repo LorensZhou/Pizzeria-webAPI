@@ -1,4 +1,17 @@
 # Pizzeria-webAPI - Handleiding
+<br>
+
+## Inhoudsopgave
+
+1. Inleiding
+2. Handleiding
+3. Benodigdheden
+4. Gebruikersrollen en gegevens
+5. Lijst van endpoints
+6. Authenticatie en autorisatie
+7. File upload en download gerbuiksaanwijzing
+8. Het testen van endpoint: /orders/auth-customer/{username}
+9. Tabel met alle endpoints en toelichting
 
 <br>
 
